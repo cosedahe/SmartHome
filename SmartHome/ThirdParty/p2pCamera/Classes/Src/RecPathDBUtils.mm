@@ -6,14 +6,16 @@
 //  Copyright 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "PicPathDBUtils.h"
+#import "RecPathDBUtils.h"
 
 
-@implementation PicPathDBUtils
+@implementation RecPathDBUtils
 
 @synthesize DatabaseName;
 @synthesize TableName;
 @synthesize selectDelegate;
+
+
 
 - (BOOL)Open:(NSString *)dbName TblName:(NSString *)tblName
 {
@@ -55,7 +57,7 @@
 {
     char createTableSql[256];
     memset(createTableSql, 0, sizeof(createTableSql));
-    sprintf(createTableSql, "CREATE TABLE IF NOT EXISTS %s(ID INTEGER PRIMARY KEY AUTOINCREMENT, did text, pictime text, picpath text)",
+    sprintf(createTableSql, "CREATE TABLE IF NOT EXISTS %s(ID INTEGER PRIMARY KEY AUTOINCREMENT, did text, pictime text, path text)",
             [tbName UTF8String]);
     sqlite3_stmt *statement;
     NSInteger SqlOK = sqlite3_prepare(db, 
@@ -97,12 +99,14 @@
     return YES;
 }
 
-- (BOOL)InsertPath:(NSString *)did PicDate:(NSString*)strDate Path:(NSString *)strPath
+
+
+- (BOOL)InsertPath:(NSString *)did Date:(NSString*)strDate Path:(NSString *)strPath
 {
     sqlite3_stmt *statement;
     char insertSql[256];
     memset(insertSql, 0, sizeof(insertSql));
-    sprintf(insertSql, "INSERT INTO %s(did,pictime,picpath) VALUES(?,?,?)",[TableName UTF8String]);
+    sprintf(insertSql, "INSERT INTO %s(did,pictime,path) VALUES(?,?,?)",[TableName UTF8String]);
     
     int preOK = sqlite3_prepare(db,
                                 insertSql,
@@ -136,7 +140,7 @@
 {
     char deleteSql[128];
     memset(deleteSql, 0, sizeof(deleteSql));
-    sprintf(deleteSql, "DELETE FROM %s WHERE picpath=?", [TableName UTF8String]);    
+    sprintf(deleteSql, "DELETE FROM %s WHERE path=?", [TableName UTF8String]);    
    
     sqlite3_stmt *statement;
     int preOK = sqlite3_prepare(db,
@@ -233,7 +237,7 @@
     
     while(sqlite3_step(statement)== SQLITE_ROW)
     {
-        //NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
         
       //  int _id = (int)sqlite3_column_int(statement, 0);
         char *str_did = (char*)sqlite3_column_text(statement, 1);
@@ -248,7 +252,7 @@
         
         [self.selectDelegate PathSelectResult:nsDID Date:nsDate Path:nsPath];
         
-        //[pool release];
+        [pool release];        
 
     }
     
@@ -256,12 +260,14 @@
         
 }
 
+
+
 - (void) dealloc
 {
     self.DatabaseName = nil;
     self.TableName = nil;
     self.selectDelegate = nil;
-    //[super dealloc];
+    [super dealloc];
 }
 
 @end

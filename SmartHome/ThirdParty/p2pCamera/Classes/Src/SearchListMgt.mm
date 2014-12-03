@@ -71,9 +71,9 @@
 
 - (void)dealloc
 {
-    //[CameraArray release];
-    //CameraArray = nil;
-    //[super dealloc];
+    [CameraArray release];
+    CameraArray = nil;
+    [super dealloc];
 }
 
 @end

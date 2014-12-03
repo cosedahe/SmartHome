@@ -24,7 +24,7 @@ CPPPPChannelManagement::~CPPPPChannelManagement()
     StopAll();
     
     if (m_Lock != nil) {
-        //[m_Lock release];
+        [m_Lock release];
         m_Lock = nil;
     }
     

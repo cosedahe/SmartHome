@@ -6,10 +6,10 @@
 //  Copyright 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "CameraDBUtils.h"
+#import "PicPathDBUtils.h"
 
 
-@implementation CameraDBUtils
+@implementation PicPathDBUtils
 
 @synthesize DatabaseName;
 @synthesize TableName;
@@ -38,7 +38,6 @@
     sqlite3_close(db);
 }
 
-
 - (NSString *)DatabaseFilePath:(NSString *)dbName
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask
@@ -54,10 +53,9 @@
 
 - (BOOL) CreateTable:(NSString *)tbName
 {
-    //NSLog(@"CreateTable.....tbName: %@",tbName);
     char createTableSql[256];
     memset(createTableSql, 0, sizeof(createTableSql));
-    sprintf(createTableSql, "CREATE TABLE IF NOT EXISTS %s(ID INTEGER PRIMARY KEY AUTOINCREMENT,name text, did text, user text, pwd text)",
+    sprintf(createTableSql, "CREATE TABLE IF NOT EXISTS %s(ID INTEGER PRIMARY KEY AUTOINCREMENT, did text, pictime text, picpath text)",
             [tbName UTF8String]);
     sqlite3_stmt *statement;
     NSInteger SqlOK = sqlite3_prepare(db, 
@@ -80,7 +78,7 @@
     }else {
         //NSLog(@"create table failed!");
     }
-    
+       
     return YES;
 }
 
@@ -99,12 +97,12 @@
     return YES;
 }
 
-- (BOOL)InsertCamera:(NSString *)name DID:(NSString *)did User:(NSString *)user Pwd:(NSString *)pwd
+- (BOOL)InsertPath:(NSString *)did PicDate:(NSString*)strDate Path:(NSString *)strPath
 {
     sqlite3_stmt *statement;
     char insertSql[256];
     memset(insertSql, 0, sizeof(insertSql));
-    sprintf(insertSql, "INSERT INTO %s(name,did,user,pwd) VALUES(?,?,?,?)",[TableName UTF8String]);
+    sprintf(insertSql, "INSERT INTO %s(did,pictime,picpath) VALUES(?,?,?)",[TableName UTF8String]);
     
     int preOK = sqlite3_prepare(db,
                                 insertSql,
@@ -117,11 +115,10 @@
         //NSLog(@"prepare insert sql is failed");
         return NO;
     }
-    
-    sqlite3_bind_text(statement, 1, [name UTF8String], -1, nil);
-    sqlite3_bind_text(statement, 2, [did UTF8String], -1, nil);
-    sqlite3_bind_text(statement, 3, [user UTF8String], -1, nil);
-    sqlite3_bind_text(statement, 4, [pwd UTF8String], -1, nil);
+  
+    sqlite3_bind_text(statement, 1, [did UTF8String], -1, nil);
+    sqlite3_bind_text(statement, 2, [strDate UTF8String], -1, nil);
+    sqlite3_bind_text(statement, 3, [strPath UTF8String], -1, nil);
     
     int sqlOK = sqlite3_step(statement);
     sqlite3_finalize(statement);
@@ -130,60 +127,52 @@
         return YES;
     }else {
         //NSLog(@"insert failed!");
-        sqlOK = sqlite3_step(statement);
-        if (sqlOK == SQLITE_DONE) {
-            return YES;
-        }
         return NO;
     }
 
 }
 
-- (BOOL)UpdateCamera:(NSString *)name DID:(NSString *)did User:(NSString *)user Pwd:(NSString *)pwd OldDID:(NSString *)olddid
+- (BOOL) RemovePath:(NSString *)strPath
 {
-    char updateSql[256];
-    memset(updateSql, 0, sizeof(updateSql));
-    sprintf(updateSql, "UPDATE %s SET name=? , did=? , user=? , pwd=? WHERE did=?", [TableName UTF8String]);
-    
+    char deleteSql[128];
+    memset(deleteSql, 0, sizeof(deleteSql));
+    sprintf(deleteSql, "DELETE FROM %s WHERE picpath=?", [TableName UTF8String]);    
+   
     sqlite3_stmt *statement;
-    int preOK = sqlite3_prepare(db, 
-                                updateSql,
+    int preOK = sqlite3_prepare(db,
+                                deleteSql,
                                 -1,
                                 &statement,
                                 nil);
+    
     if (preOK == SQLITE_OK) {
-        //NSLog(@"prepare update sql success!");
+        //NSLog(@"prepare delete sql success!");
     }else {
-        //NSLog(@"prepare updata sql failed!");
+        //NSLog(@"prepare delete sql failed!");
         return NO;
     }
     
-    sqlite3_bind_text(statement, 1, [name UTF8String], -1, SQLITE_TRANSIENT);
-    sqlite3_bind_text(statement, 2, [did UTF8String], -1, SQLITE_TRANSIENT);
-    sqlite3_bind_text(statement, 3, [user UTF8String], -1, SQLITE_TRANSIENT);
-    sqlite3_bind_text(statement, 4, [pwd UTF8String], -1, SQLITE_TRANSIENT);
-    sqlite3_bind_text(statement, 5, [olddid UTF8String], -1, SQLITE_TRANSIENT);
-    
+    sqlite3_bind_text(statement, 1, [strPath UTF8String], -1, SQLITE_TRANSIENT);
     
     int sqlOK = sqlite3_step(statement);
     sqlite3_finalize(statement);
     
     if (sqlOK == SQLITE_DONE) {
-        //NSLog(@"update success!");
+        //NSLog(@"delete success!");
     }else {
-        //NSLog(@"update failed!");
+        //NSLog(@"delete failed!");
         return NO;
     }
     
-    return YES;  
+    return YES;
 }
 
-- (BOOL) RemoveCamera:(NSString *)did 
+- (BOOL) RemovePathByID:(NSString *)did
 {
     char deleteSql[128];
     memset(deleteSql, 0, sizeof(deleteSql));
     sprintf(deleteSql, "DELETE FROM %s WHERE did=?", [TableName UTF8String]);    
-   
+    
     sqlite3_stmt *statement;
     int preOK = sqlite3_prepare(db,
                                 deleteSql,
@@ -200,6 +189,8 @@
     
     sqlite3_bind_text(statement, 1, [did UTF8String], -1, SQLITE_TRANSIENT);
     
+    //NSLog(@"RemovePathByID deleteSql: %s", deleteSql);
+    
     int sqlOK = sqlite3_step(statement);
     sqlite3_finalize(statement);
     
@@ -211,14 +202,13 @@
     }
     
     return YES;
+
 }
 
 - (void) SelectAll
 {
     char selectSql[128];
-    
     //NSLog(@"Call SelectAll");
-    
     if (selectDelegate == nil) 
     {
         //NSLog(@"selectDelegate == nil");
@@ -243,25 +233,23 @@
     
     while(sqlite3_step(statement)== SQLITE_ROW)
     {
-        //NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
         
       //  int _id = (int)sqlite3_column_int(statement, 0);
-        char *str_name = (char*)sqlite3_column_text(statement, 1);
-        char *str_did = (char*)sqlite3_column_text(statement, 2);
-        char *str_user = (char*)sqlite3_column_text(statement, 3);
-        char *str_pwd = (char*)sqlite3_column_text(statement, 4);
+        char *str_did = (char*)sqlite3_column_text(statement, 1);
+        char *str_date = (char*)sqlite3_column_text(statement, 2);
+        char *str_path = (char*)sqlite3_column_text(statement, 3);
         
         //NSLog(@"result.. _id: %d name: %s  pwd: %s", _id, str_name,str_pwd);
         
-        NSString *nsName = [NSString stringWithUTF8String:str_name];
         NSString *nsDID = [NSString stringWithUTF8String:str_did];
-        NSString *nsUser = [NSString stringWithUTF8String:str_user];
-        NSString *nsPwd = [NSString stringWithUTF8String:str_pwd];        
+        NSString *nsDate = [NSString stringWithUTF8String:str_date];
+        NSString *nsPath = [NSString stringWithUTF8String:str_path];        
         
-        [self.selectDelegate SelectP2PResult:nsName DID:nsDID User:nsUser Pwd:nsPwd];
+        [self.selectDelegate PathSelectResult:nsDID Date:nsDate Path:nsPath];
         
-        //[pool release];
-                
+        [pool release];        
+
     }
     
     sqlite3_finalize(statement);
@@ -273,7 +261,7 @@
     self.DatabaseName = nil;
     self.TableName = nil;
     self.selectDelegate = nil;
-    //[super dealloc];
+    [super dealloc];
 }
 
 @end

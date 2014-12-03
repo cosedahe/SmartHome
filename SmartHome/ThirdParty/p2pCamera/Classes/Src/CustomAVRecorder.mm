@@ -34,12 +34,12 @@ CCustomAVRecorder::~CCustomAVRecorder()
     StopRecord();
     SAFE_DELETE(m_pCircleBuf);
     if (indexArray != nil) {
-        //[indexArray release];
+        [indexArray release];
         indexArray = nil;
     }
     [m_stopLock unlock];
     
-    //[m_stopLock release];
+    [m_stopLock release];
     
 }
 
@@ -186,9 +186,9 @@ int CCustomAVRecorder::StopRecord()
 void* CCustomAVRecorder::RecordThread(void *param)
 {
     CCustomAVRecorder *pRecorder = (CCustomAVRecorder*)param;
-    //NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     pRecorder->RecordProcess();
-    //[pool release];
+    [pool release];
     return NULL;
 }
 

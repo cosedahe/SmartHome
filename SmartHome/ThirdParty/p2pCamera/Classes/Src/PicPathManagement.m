@@ -6,14 +6,14 @@
 //  Copyright (c) 2012年 __MyCompanyName__. All rights reserved.
 //
 
-#import "RecPathManagement.h"
+#import "PicPathManagement.h"
 
 
 #define STR_DIC_DID "did"
 #define STR_DIC_DATE_ARRAY "date"
 #define STR_DIC
 
-@implementation RecPathManagement
+@implementation PicPathManagement
 
 - (id) init {
     self = [super init];
@@ -21,10 +21,10 @@
         IDArray = [[NSMutableArray alloc] init];
 
         //database
-        recPathDBUtil = [[RecPathDBUtils alloc] init];
-        recPathDBUtil.selectDelegate = self;
-        [recPathDBUtil Open:@"OBJ_P2P_CAMERA_DB" TblName:@"OBJ_P2P_RECPATH_TABLE"];
-        [recPathDBUtil SelectAll];
+        picPathDBUtil = [[PicPathDBUtils alloc] init];
+        picPathDBUtil.selectDelegate = self;
+        [picPathDBUtil Open:@"OBJ_P2P_CAMERA_DB" TblName:@"OBJ_P2P_PICPATH_TABLE"];
+        [picPathDBUtil SelectAll];
     }
    
     return self;
@@ -33,27 +33,31 @@
 - (void) dealloc
 {
     if (IDArray != nil) {
-        //[IDArray release];
+        [IDArray release];
         IDArray = nil;
     }
 
-    //[super dealloc];
+    [super dealloc];
 }
+-(void)reSelectAll{
+    [IDArray removeAllObjects];
+    [picPathDBUtil SelectAll];
 
-- (BOOL)InsertPath:(NSString *)did Date:(NSString *)strDate Path:(NSString *)strPath
+}
+- (BOOL)InsertPicPath:(NSString *)did PicDate:(NSString *)strDate PicPath:(NSString *)strPath
 {
     //NSLog(@"InsertPicPath  did: %@, strDate: %@, strPath: %@", did, strDate, strPath);
     
     for (NSDictionary *IDDic in IDArray) {
-        //查找是否有改ID号对应的日期数组
+        //查找是否有该ID号对应的日期数组
         NSMutableArray *dateArray = [IDDic objectForKey:did];
         //如果ID存在
         if (dateArray != nil) {
             for (NSDictionary *DateDic in dateArray) {
-                NSMutableArray *recArray = [DateDic objectForKey:strDate];
+                NSMutableArray *picArray = [DateDic objectForKey:strDate];
                 //日期在日期数组中已经存在
-                if (recArray != nil) {
-                    for(NSString *_path in recArray){
+                if (picArray != nil) {
+                    for(NSString *_path in picArray){
                         //图片路径在路径数组中已经存在
                         if ([_path caseInsensitiveCompare:strPath] == NSOrderedSame) {
                        
@@ -62,19 +66,19 @@
                     }
                     
                     //图片在路径数组中不存在
-                    [recArray addObject:strPath];
-                    return [recPathDBUtil InsertPath:did Date:strDate Path:strPath];
+                    [picArray addObject:strPath];
+                    return [picPathDBUtil InsertPath:did PicDate:strDate Path:strPath];
                 }
                 
             }
             
             //如果日期数组中不存在该日期
-            NSMutableArray *_recArray = [[NSMutableArray alloc] init];
-            [_recArray addObject:strPath];
-            NSDictionary *_dateDic = [NSDictionary dictionaryWithObject:_recArray forKey:strDate];
+            NSMutableArray *_picArray = [[NSMutableArray alloc] init];
+            [_picArray addObject:strPath];
+            NSDictionary *_dateDic = [NSDictionary dictionaryWithObject:_picArray forKey:strDate];
             [dateArray addObject:_dateDic];
-            //[_recArray release];
-            return [recPathDBUtil InsertPath:did Date:strDate Path:strPath];
+            [_picArray release];
+            return [picPathDBUtil InsertPath:did PicDate:strDate Path:strPath];
             
         }
         
@@ -82,22 +86,22 @@
     
     //如果ID数组中不存在该ID号
     NSMutableArray *_dateArray = [[NSMutableArray alloc] init];
-    NSMutableArray *_recArray = [[NSMutableArray alloc] init];
-    [_recArray addObject:strPath];
-    NSDictionary *_dateDic = [NSDictionary dictionaryWithObject:_recArray forKey:strDate];
+    NSMutableArray *_picArray = [[NSMutableArray alloc] init];
+    [_picArray addObject:strPath];
+    NSDictionary *_dateDic = [NSDictionary dictionaryWithObject:_picArray forKey:strDate];
     [_dateArray addObject:_dateDic];
     
     NSDictionary *_idDic = [NSDictionary dictionaryWithObject:_dateArray forKey:did];
     [IDArray addObject:_idDic];
     
-    //[_recArray release];
-    //[_dateArray release];
+    [_picArray release];
+    [_dateArray release];
     
-    return [recPathDBUtil InsertPath:did Date:strDate Path:strPath];
+    return [picPathDBUtil InsertPath:did PicDate:strDate Path:strPath];
     
 }
 
-- (BOOL)InitInsertPath:(NSString *)did Date:(NSString *)strDate Path:(NSString *)strPath
+- (BOOL)InitInsertPicPath:(NSString *)did PicDate:(NSString *)strDate PicPath:(NSString *)strPath
 {
     //NSLog(@"InsertPicPath  did: %@, strDate: %@, strPath: %@", did, strDate, strPath);
     
@@ -107,10 +111,10 @@
         //如果ID存在
         if (dateArray != nil) {
             for (NSDictionary *DateDic in dateArray) {
-                NSMutableArray *recArray = [DateDic objectForKey:strDate];
+                NSMutableArray *picArray = [DateDic objectForKey:strDate];
                 //日期在日期数组中已经存在
-                if (recArray != nil) {
-                    for(NSString *_path in recArray){
+                if (picArray != nil) {
+                    for(NSString *_path in picArray){
                         //图片路径在路径数组中已经存在
                         if ([_path caseInsensitiveCompare:strPath] == NSOrderedSame) {
                             
@@ -119,7 +123,8 @@
                     }
                     
                     //图片在路径数组中不存在
-                    [recArray addObject:strPath];
+                    [picArray addObject:strPath];
+                    //return [picPathDBUtil InsertPath:did PicDate:strDate Path:strPath];
                     return TRUE;
                 }
                 
@@ -127,11 +132,12 @@
             }
             
             //如果日期数组中不存在该日期
-            NSMutableArray *_recArray = [[NSMutableArray alloc] init];
-            [_recArray addObject:strPath];
-            NSDictionary *_dateDic = [NSDictionary dictionaryWithObject:_recArray forKey:strDate];
+            NSMutableArray *_picArray = [[NSMutableArray alloc] init];
+            [_picArray addObject:strPath];
+            NSDictionary *_dateDic = [NSDictionary dictionaryWithObject:_picArray forKey:strDate];
             [dateArray addObject:_dateDic];
-            //[_recArray release];
+            [_picArray release];
+            //return [picPathDBUtil InsertPath:did PicDate:strDate Path:strPath];
             return TRUE;
             
         }
@@ -140,22 +146,23 @@
     
     //如果ID数组中不存在该ID号
     NSMutableArray *_dateArray = [[NSMutableArray alloc] init];
-    NSMutableArray *_recArray = [[NSMutableArray alloc] init];
-    [_recArray addObject:strPath];
-    NSDictionary *_dateDic = [NSDictionary dictionaryWithObject:_recArray forKey:strDate];
+    NSMutableArray *_picArray = [[NSMutableArray alloc] init];
+    [_picArray addObject:strPath];
+    NSDictionary *_dateDic = [NSDictionary dictionaryWithObject:_picArray forKey:strDate];
     [_dateArray addObject:_dateDic];
     
     NSDictionary *_idDic = [NSDictionary dictionaryWithObject:_dateArray forKey:did];
     [IDArray addObject:_idDic];
     
-    //[_recArray release];
-    //[_dateArray release];
+    [_picArray release];
+    [_dateArray release];
     
+    //return [picPathDBUtil InsertPath:did PicDate:strDate Path:strPath];
     return TRUE;
     
 }
 
-- (NSMutableArray*) GetTotalDataArray:(NSString *)did
+- (NSMutableArray*) GetTotalPicDataArray:(NSString *)did
 {
     //NSLog(@"GetTotalPicDataArray %@", did);
     
@@ -173,7 +180,7 @@
 {
     //NSLog(@"GetTotalPathArray did:%@, date: %@", did, date);
     
-    NSMutableArray *dateArray = [self GetTotalDataArray:did];
+    NSMutableArray *dateArray = [self GetTotalPicDataArray:did];
     if (dateArray == nil) {
         return nil;
     }
@@ -183,9 +190,9 @@
         //NSArray *arr = [dateDic allKeys];
         //NSLog(@"arr: %@", [arr objectAtIndex:0]);
         
-        NSMutableArray *recArray = [dateDic objectForKey:date];
-        if (recArray != nil) {
-            return recArray;
+        NSMutableArray *picArray = [dateDic objectForKey:date];
+        if (picArray != nil) {
+            return picArray;
         }
     }
     
@@ -220,7 +227,7 @@
     return YES;
 }
 
-- (BOOL)RemovePath:(NSString *)did Date:(NSString *)strDate Path:(NSString *)strPath
+- (BOOL)RemovePicPath:(NSString *)did PicDate:(NSString *)strDate PicPath:(NSString *)strPath
 {
     for (NSDictionary *IDDic in IDArray) 
     {
@@ -241,7 +248,7 @@
                             [self DeleteFileByName:did fileName:fileName];
                             
                             //dalete info in database
-                            [recPathDBUtil RemovePath: fileName];
+                            [picPathDBUtil RemovePath: fileName];
                             
                             //find the file
                             [pathArray removeObject:fileName];
@@ -287,32 +294,12 @@
     }
     
     return YES;
-}
-
-- (BOOL) RemovePathByID:(NSString *)did
-{
-    //NSLog(@"RemovePathByID did: %@", did);
     
-    [recPathDBUtil RemovePathByID:did];
-    [self DeleteFileByID:did];
-    
-    for (NSDictionary *idDic in IDArray)
-    {
-        NSMutableArray *dateArray = [idDic objectForKey:did];
-        if (dateArray != nil) {
-            //NSLog(@"111111");
-            [IDArray removeObject:idDic];
-            //[picPathDBUtil RemovePathByID:did];
-            //[self DeleteFileByID:did];
-            return YES;
-        }
-        
-    }
-    return NO;
 }
+//kaven 
+-(NSDictionary *) GetPicCountAndFirstPicByID:(NSString *)strDID{
+    //NSLog(@"GetPicCountAndFirstPicByID 111111111111");
 
-//kaven
--(NSDictionary *) GetSumAndFirstPicByID:(NSString *)strDID{
     int count=[self GetTotalNumByID:strDID];
     NSNumber *sum=[NSNumber numberWithInt:count];
     UIImage *img=nil;
@@ -325,29 +312,31 @@
         }
     }
     NSDictionary *picDic=[NSDictionary dictionaryWithObjectsAndKeys:sum,@"sum",img,@"img",nil];
-    //[picDic retain];
-    //[picDic autorelease];
+    [picDic retain];
+    [picDic autorelease];
     return picDic;
-
 }
--(void) UpdateImageByID:(NSString *)strDID Img:(UIImage *)img{
+-(void)updateImgByDID:(UIImage *)myImg DID:(NSString *)did{
+   // NSLog(@"updateImgByDID 00000000000");
     int count=IDArray.count;
     int i;
-    for (i=0; i<count; i++) {
-        NSDictionary *idDic=[IDArray objectAtIndex:i];
-        NSMutableArray *dateArray = [idDic objectForKey:strDID];
-        if (dateArray != nil) {
-            NSDictionary *dic=[NSDictionary dictionaryWithObjectsAndKeys:dateArray,strDID,img,@"img", nil];
+    for (i=0;i<count;i++) {
+        //查找是否有改ID号对应的日期数组
+        NSDictionary *IDDic=[IDArray objectAtIndex:i];
+        NSMutableArray *dateArray = [IDDic objectForKey:did];
+        if(dateArray!=nil){
+            NSDictionary *dic=[NSDictionary dictionaryWithObjectsAndKeys:dateArray,did,myImg,@"img", nil];
+            
             [IDArray replaceObjectAtIndex:i withObject:dic];
             return;
         }
     }
+
 }
 //kaven
-
 - (NSInteger) GetTotalNumByID:(NSString *)strDID
 {
-    //NSLog(@"GetTotalNumByID");
+    
     int nTotalNum = 0;
     
     for (NSDictionary *idDic in IDArray)
@@ -372,7 +361,7 @@
 
 - (NSInteger) GetTotalNumByIDAndDate:(NSString *)strDID Date:(NSString *)strDate
 {
-    //NSLog(@"GetTotalNumByIDAndDate...");
+    
     for (NSDictionary *idDic in IDArray)
     {
         NSMutableArray *dateArray = [idDic objectForKey:strDID];
@@ -403,10 +392,7 @@
             for (NSDictionary *dateDic in dateArray)
             {
                 NSMutableArray *pathArray = [[dateDic allValues] objectAtIndex:0];
-                if (pathArray != nil) {
-                    if (pathArray.count == 0) {
-                        return nil;
-                    }
+                if (pathArray != nil && pathArray.count > 0) {
                     NSString *strPath = [pathArray objectAtIndex:0];
                     if (strPath != nil) {
                         return strPath;
@@ -434,22 +420,43 @@
             for (NSDictionary *dateDic in dateArray)
             {
                 NSMutableArray *pathArray = [dateDic objectForKey:strDate];
-                if (pathArray != nil) {
-                    if (pathArray.count == 0) {
-                        return nil;
-                    }
+                if (pathArray != nil && pathArray.count > 0) {
                     NSString *strPath = [pathArray objectAtIndex:0];
                     return strPath;
                 }
-     
+                
+                
             }
             
             return nil;
+   
             
         }
     }
     
     return nil;
+}
+
+- (BOOL) RemovePicPathByID:(NSString *)did
+{
+    NSLog(@"RemovePicPathByID did: %@", did);
+    
+    [picPathDBUtil RemovePathByID:did];
+    [self DeleteFileByID:did];
+    
+    for (NSDictionary *idDic in IDArray)
+    {
+        NSMutableArray *dateArray = [idDic objectForKey:did];
+        if (dateArray != nil) {
+            //NSLog(@"111111");
+            [IDArray removeObject:idDic];
+            //[picPathDBUtil RemovePathByID:did];
+            //[self DeleteFileByID:did];
+            return YES;
+        }
+        
+    }
+    return NO;
 }
 
 #pragma mark -
@@ -459,7 +466,7 @@
 {
     //NSLog(@"PathSelectResult... did: %@  Date: %@ Path: %@", did, Date, Path);
     
-    [self InitInsertPath:did Date:Date Path:Path];
+    [self InitInsertPicPath:did PicDate:Date PicPath:Path];
     
 }
 

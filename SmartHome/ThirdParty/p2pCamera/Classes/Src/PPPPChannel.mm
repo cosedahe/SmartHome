@@ -110,7 +110,7 @@ CPPPPChannel::~CPPPPChannel()
 {
     Stop();
     
-    /*[m_PlayViewPPPPStatusDelegateLock release];
+    [m_PlayViewPPPPStatusDelegateLock release];
     m_PlayViewPPPPStatusDelegateLock = nil;
     
     [m_PlayViewAVDataDelegateLock release];
@@ -147,7 +147,7 @@ CPPPPChannel::~CPPPPChannel()
     m_MailLock = nil;
     
     [m_PlaybackViewAVDataDelegateLock release];
-    m_PlaybackViewAVDataDelegateLock = nil;*/
+    m_PlaybackViewAVDataDelegateLock = nil;
 }
 
 void CPPPPChannel::PPPPClose()
@@ -166,10 +166,10 @@ void CPPPPChannel::PPPPClose()
 
 void CPPPPChannel::MsgNotify(int MsgType,int Param)
 {
-    //NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     MainWindowNotify(MsgType, Param);
     PlayWindowNotify(MsgType, Param);
-    //[pool release];
+    [pool release]; 
 }
 
 int CPPPPChannel::Start()
@@ -406,9 +406,9 @@ void CPPPPChannel::ProcessSnapshot(char *pbuf, int len)
 {
     //NSLog(@"ProcessSnapshot....");     
     if (m_CameraViewSnapshotDelegate != nil) {
-        //NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
         [m_CameraViewSnapshotDelegate SnapshotNotify:[NSString stringWithUTF8String:szDID] data:pbuf length:len];        
-        //[pool release];
+        [pool release];
     }    
 }
 
@@ -957,9 +957,9 @@ int CPPPPChannel::CameraControl(int param, int value)
 void CPPPPChannel::PlayViewParamNotify(int paramType, void *param)
 {
     [m_PlayViewParamNotifyDelegateLock lock];
-    //NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     [m_PlayViewParamNotifyDelegate ParamNotify:paramType params:param];
-    //[pool release];
+    [pool release];
     [m_PlayViewParamNotifyDelegateLock unlock];
 }
 
@@ -1980,7 +1980,7 @@ void CPPPPChannel::PlaybackVideoPlayerProcess()
         {   
 
             
-            //NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+            NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
             
             [m_PlaybackViewAVDataDelegateLock lock];
             
@@ -2012,18 +2012,18 @@ void CPPPPChannel::PlaybackVideoPlayerProcess()
             
             [m_PlaybackViewAVDataDelegateLock unlock];
             
-            //[pool release];
+            [pool release];
             
         }      
         else /* JPEG */
         {
-            //NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+            NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
             NSData *image = [[NSData alloc] initWithBytes:pbuf length:videoLen];
             UIImage *img = [[UIImage alloc] initWithData:image];  
             PlaybackImageNotify(img, 0);
-            //[img release];
-            //[image release];
-            //[pool release];
+            [img release];
+            [image release];
+            [pool release];
             
         }
         
@@ -2158,7 +2158,7 @@ void CPPPPChannel::PlayProcess()
             
 
             
-            //NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+            NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
             
             
             int yuvlen = 0;
@@ -2183,20 +2183,20 @@ void CPPPPChannel::PlayProcess()
             
             H264DataNotify((unsigned char*)pbuf, videoLen, videohead.frametype, untimestamp);
             
-            //[pool release];
+            [pool release];
             
             
         }      
         else /* JPEG */
         {
-            //NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+            NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
             NSData *image = [[NSData alloc] initWithBytes:pbuf length:videoLen];
             UIImage *img = [[UIImage alloc] initWithData:image];  
             ImageNotify(img, untimestamp);
-            //[img release];
-            //[image release];
+            [img release];
+            [image release];
             
-            //[pool release];
+            [pool release];
             
         }
         

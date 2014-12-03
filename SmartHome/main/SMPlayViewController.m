@@ -1,18 +1,18 @@
 //
-//  SMCameraViewController.m
+//  SMPlayViewController.m
 //  SmartHome
 //
 //  Created by Fang minghua on 14-12-3.
 //  Copyright (c) 2014年 www.chongchi-tech.com. All rights reserved.
 //
 
-#import "SMCameraViewController.h"
+#import "SMPlayViewController.h"
 
-@interface SMCameraViewController ()
+@interface SMPlayViewController ()
 
 @end
 
-@implementation SMCameraViewController
+@implementation SMPlayViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];

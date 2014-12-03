@@ -1015,6 +1015,9 @@
                                                 <state key="normal" title="返回">
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="btn_back_onClick:" destination="sgp-bT-8i0" eventType="touchUpInside" id="UWb-GM-NAq"/>
+                                                </connections>
                                             </button>
                                         </barButtonItem>
                                     </navigationItem>
@@ -1047,6 +1050,9 @@
                                         <state key="normal" title="连接">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="btn_connectCam_onClick:" destination="sgp-bT-8i0" eventType="touchUpInside" id="yhX-7X-55a"/>
+                                        </connections>
                                     </button>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aWG-a3-hlN">
                                         <rect key="frame" x="76" y="4" width="204" height="30"/>
@@ -1075,17 +1081,59 @@
                                         <state key="normal" title="局域网搜索">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="startSearch:" destination="sgp-bT-8i0" eventType="touchUpInside" id="cU5-X7-3u0"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZSk-Dm-PgC">
+                                <rect key="frame" x="16" y="334" width="288" height="214"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.8440896739" green="0.8440896739" blue="0.8440896739" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
+                    <connections>
+                        <outlet property="playView" destination="ZSk-Dm-PgC" id="iYZ-z1-edn"/>
+                        <outlet property="text_cameraID" destination="aWG-a3-hlN" id="ccd-Ye-aum"/>
+                        <outlet property="text_pwd" destination="v4P-xQ-YMT" id="zke-ib-rtX"/>
+                        <outlet property="text_user" destination="hER-Z9-rEa" id="RTf-na-NI0"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fqR-Sj-Mg3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-4536" y="-1017"/>
+        </scene>
+        <!--Play View Controller-->
+        <scene sceneID="ZKr-28-Ft2">
+            <objects>
+                <viewController id="bQ9-nf-giv" customClass="SMPlayViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="uXL-ra-Kng"/>
+                        <viewControllerLayoutGuide type="bottom" id="Px3-nv-PEA"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="atv-cQ-qer">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8he-hJ-fPF">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="8he-hJ-fPF" firstAttribute="leading" secondItem="atv-cQ-qer" secondAttribute="leading" id="139-aZ-lY1"/>
+                            <constraint firstAttribute="trailing" secondItem="8he-hJ-fPF" secondAttribute="trailing" id="hML-Zr-fSQ"/>
+                            <constraint firstItem="8he-hJ-fPF" firstAttribute="bottom" secondItem="Px3-nv-PEA" secondAttribute="top" id="n5N-fR-YbS"/>
+                            <constraint firstItem="8he-hJ-fPF" firstAttribute="top" secondItem="atv-cQ-qer" secondAttribute="top" id="xwZ-wn-KAq"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OHX-Dj-Bxn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4107" y="-1023"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="ShD-gU-NTf">

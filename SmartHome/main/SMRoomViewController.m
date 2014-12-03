@@ -226,11 +226,11 @@ static int newButtonNumber = 0;
 {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    //if([segue.identifier isEqualToString:@"room_to_air"])
-    //{
+    if(![segue.identifier isEqualToString:@"room_to_camera"])
+    {
         id theSegue = segue.destinationViewController;
         [theSegue setValue:furniture forKey:@"furniture"];
-    //}
+    }
 }
 
 

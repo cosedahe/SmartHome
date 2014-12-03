@@ -3,6 +3,7 @@
 #include "defineutility.h"
 #include "CircleBuf.h"
 
+
 CCircleBuf::CCircleBuf()
 {
 	m_pBuf = NULL;
@@ -14,7 +15,7 @@ CCircleBuf::~CCircleBuf()
 {
 	Release();
     
-    //[m_Lock release];
+    [m_Lock release];
     m_Lock = nil;
 }
 
