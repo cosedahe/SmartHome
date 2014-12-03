@@ -124,9 +124,10 @@
     int count = 0;
     NSString *curtcode = [down stringValue];
     SocketMessage *mySocketMessage = [SocketMessage getInstance];
+    [mySocketMessage sendCurtCode:curtcode];
     while(!onSucceedListener.dataReceived)
     {
-        if(count == 3 || onSucceedListener.socketResult != nil)
+        if(count == 3 || onSucceedListener.dataReceived)
         {
             //连接超时
             break;
@@ -134,7 +135,7 @@
         else
         {
             count++;
-            [mySocketMessage sendCurtCode:curtcode];
+            
             [NSThread sleepForTimeInterval:2];
         }
     }
