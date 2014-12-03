@@ -271,13 +271,13 @@ void CSearchDVS::GetNetParam(PBCASTPARAM pstParam)
     
     if (searchResultDelegate != nil)
     {
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+        //NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
         [searchResultDelegate SearchCameraResult:[NSString stringWithUTF8String:mac] 
                                             Name:[NSString stringWithUTF8String:pstParam->szDevName] 
                                             Addr:[NSString stringWithUTF8String:pstParam->szIpAddr]
                                             Port:[NSString stringWithUTF8String:szport]
                                             DID:[NSString stringWithUTF8String:pstParam->dwDeviceID]];
-        [pool release];
+        //[pool release];
     }
 }
 

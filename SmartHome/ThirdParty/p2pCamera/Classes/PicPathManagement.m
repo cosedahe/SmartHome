@@ -33,11 +33,11 @@
 - (void) dealloc
 {
     if (IDArray != nil) {
-        [IDArray release];
+        //[IDArray release];
         IDArray = nil;
     }
 
-    [super dealloc];
+    //[super dealloc];
 }
 -(void)reSelectAll{
     [IDArray removeAllObjects];
@@ -77,7 +77,7 @@
             [_picArray addObject:strPath];
             NSDictionary *_dateDic = [NSDictionary dictionaryWithObject:_picArray forKey:strDate];
             [dateArray addObject:_dateDic];
-            [_picArray release];
+            //[_picArray release];
             return [picPathDBUtil InsertPath:did PicDate:strDate Path:strPath];
             
         }
@@ -94,8 +94,8 @@
     NSDictionary *_idDic = [NSDictionary dictionaryWithObject:_dateArray forKey:did];
     [IDArray addObject:_idDic];
     
-    [_picArray release];
-    [_dateArray release];
+    //[_picArray release];
+    //[_dateArray release];
     
     return [picPathDBUtil InsertPath:did PicDate:strDate Path:strPath];
     
@@ -136,7 +136,7 @@
             [_picArray addObject:strPath];
             NSDictionary *_dateDic = [NSDictionary dictionaryWithObject:_picArray forKey:strDate];
             [dateArray addObject:_dateDic];
-            [_picArray release];
+            //[_picArray release];
             //return [picPathDBUtil InsertPath:did PicDate:strDate Path:strPath];
             return TRUE;
             
@@ -154,8 +154,8 @@
     NSDictionary *_idDic = [NSDictionary dictionaryWithObject:_dateArray forKey:did];
     [IDArray addObject:_idDic];
     
-    [_picArray release];
-    [_dateArray release];
+    //[_picArray release];
+    //[_dateArray release];
     
     //return [picPathDBUtil InsertPath:did PicDate:strDate Path:strPath];
     return TRUE;
@@ -312,8 +312,8 @@
         }
     }
     NSDictionary *picDic=[NSDictionary dictionaryWithObjectsAndKeys:sum,@"sum",img,@"img",nil];
-    [picDic retain];
-    [picDic autorelease];
+    //[picDic retain];
+    //[picDic autorelease];
     return picDic;
 }
 -(void)updateImgByDID:(UIImage *)myImg DID:(NSString *)did{

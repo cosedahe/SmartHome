@@ -67,7 +67,7 @@
             NSDictionary *dic=[[NSDictionary alloc ]initWithObjectsAndKeys:name,@STR_NAME,user,@STR_USER,pwd,@STR_PWD,nPPPPStatus,@STR_PPPP_STATUS,nPPPPMode,@STR_PPPP_MODE,authority,@STR_AUTHORITY,_did,@STR_DID,img,@STR_IMG, nil] ;
    
             [CameraArray replaceObjectAtIndex:i withObject:dic];
-            [dic release];
+            //[dic release];
      
             [m_Lock unlock];
 
@@ -215,7 +215,7 @@
                                         PPPPMode, @STR_PPPP_MODE,
                                         img, @STR_IMG, nil];
             [CameraArray replaceObjectAtIndex:i withObject:_cameraDic];
-            [PPPPMode release];
+            //[PPPPMode release];
             [m_Lock unlock];
             return i;
         }
@@ -255,7 +255,7 @@
                                         PPPPMode, @STR_PPPP_MODE,
                                         img, @STR_IMG, nil];
             [CameraArray replaceObjectAtIndex:i withObject:_cameraDic];
-            [PPPPStatus release];
+            //[PPPPStatus release];
             [m_Lock unlock];
             return i;
         }
@@ -300,8 +300,8 @@
     NSDictionary *cameraDic = [CameraArray objectAtIndex:index];
     //NSString *did=[cameraDic objectForKey:@STR_DID];
     //NSLog(@"GetCameraAtIndex  cameraDic ======999999999====  did=%@",did);
-    [cameraDic retain];
-    [cameraDic autorelease];
+    //[cameraDic retain];
+    //[cameraDic autorelease];
     [m_Lock unlock];
     return cameraDic;
 }
@@ -379,23 +379,23 @@
     
     [CameraArray addObject:cameraDic];
     
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    //NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     UIImage *image = [self GetCameraSnapshotImage:did];
     if (image != nil) {
         [self UpdateCamereaImage:did Image:image];
     }
-    [pool release];
+    //[pool release];
 
 }
 
 - (void)dealloc
 {
-    [CameraArray release];
+    //[CameraArray release];
     CameraArray = nil;
     [cameraDB Close];
-    [cameraDB release];
+    //[cameraDB release];
     cameraDB = nil;
-    [super dealloc];
+    //[super dealloc];
 }
 
 @end

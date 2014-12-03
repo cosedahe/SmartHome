@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
 
-@interface AddRoomViewController : BaseViewController
+@interface AddRoomViewController : BaseViewController <UIGestureRecognizerDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *txt_roomType;
 @property (weak, nonatomic) IBOutlet UITextField *txt_name;
 

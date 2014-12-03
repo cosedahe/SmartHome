@@ -264,7 +264,7 @@
     [bean setId:sqlite3_column_int(statement, 0)];
     [bean setFurnitureId:sqlite3_column_int(statement, 1)];
     [bean setDowncode:sqlite3_column_int64(statement, 2)];
-    [bean setTag:[[NSString alloc] initWithUTF8String:sqlite3_column_text(statement, 3)]];
+    [bean setTag:[[NSString alloc] initWithUTF8String:(char *)sqlite3_column_text(statement, 3)]];
     [bean setWidgetid:sqlite3_column_int64(statement, 4)];
     [bean setStatus:sqlite3_column_int(statement, 5)];
     

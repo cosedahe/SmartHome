@@ -91,8 +91,8 @@
 {
     //NSLog(@"IpCameraClientAppDelegate dealloc");
     self.window = nil;
-    [_p2pCameraVC release],_p2pCameraVC = nil;
-    [super dealloc];
+    //[_p2pCameraVC release],_p2pCameraVC = nil;
+    //[super dealloc];
 }
 
 +(BOOL)is43Version{

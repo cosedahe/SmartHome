@@ -35,7 +35,7 @@
 #define CMD_SET_RESPONSE  0x0802
 
 
-class CSearchDVS  
+class CSearchDVS
 {
 public:
 	CSearchDVS();

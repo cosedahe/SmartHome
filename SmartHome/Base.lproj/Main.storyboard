@@ -984,6 +984,7 @@
                         <segue destination="zkN-mq-Pdu" kind="modal" identifier="room_to_air" id="PzN-Wb-nQo"/>
                         <segue destination="IDd-CE-Ccr" kind="modal" identifier="room_to_curtain" id="m8G-bA-EGd"/>
                         <segue destination="cc8-Hm-ViA" kind="modal" identifier="room_to_television" id="E4S-wE-pEU"/>
+                        <segue destination="sgp-bT-8i0" kind="modal" identifier="room_to_camera" id="Rfw-fF-jA5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gtr-uM-ApV" userLabel="First Responder" sceneMemberID="firstResponder"/>

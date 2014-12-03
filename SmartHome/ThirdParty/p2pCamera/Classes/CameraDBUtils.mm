@@ -243,7 +243,7 @@
     
     while(sqlite3_step(statement)== SQLITE_ROW)
     {
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+        //NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
         
       //  int _id = (int)sqlite3_column_int(statement, 0);
         char *str_name = (char*)sqlite3_column_text(statement, 1);
@@ -260,7 +260,7 @@
         
         [self.selectDelegate SelectP2PResult:nsName DID:nsDID User:nsUser Pwd:nsPwd];
         
-        [pool release];        
+        //[pool release];
                 
     }
     
@@ -273,7 +273,7 @@
     self.DatabaseName = nil;
     self.TableName = nil;
     self.selectDelegate = nil;
-    [super dealloc];
+    //[super dealloc];
 }
 
 @end

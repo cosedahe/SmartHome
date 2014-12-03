@@ -11,6 +11,7 @@
 #import "SocketChatUtils.h"
 #import <netinet/in.h>
 #import <arpa/inet.h>
+#import <sys/socket.h>
 
 @implementation AbstractUdpSocket
 
@@ -245,7 +246,7 @@ int count = 0;
     
 	/* server port */
 
-	char *cmsg = [msg UTF8String];
+	char *cmsg = (char *)[msg UTF8String];
     echolen = strlen(cmsg);
     
 	// set send and receive timeout
@@ -318,7 +319,7 @@ int count = 0;
         if(FD_ISSET(socketId, &readfds) > 0)
         {
 
-            int len = recvfrom(socketId, buffer, sizeof(buffer), 0, (struct sockaddr*)&destination, &addr_len);
+            int len = recvfrom(socketId, buffer, sizeof(buffer), 0, (struct sockaddr*)&destination, (socklen_t *)&addr_len);
             if(len<0)
                 printf("####%d\n", errno);
             if(len>0)

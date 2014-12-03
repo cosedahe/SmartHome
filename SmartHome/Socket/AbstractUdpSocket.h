@@ -7,21 +7,21 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AsyncUdpSocket.h"
 #import "OnReceiverMessageListener.h"
 #import "OnIfSucceedMessageListener.h"
 
-static AsyncUdpSocket *_socket;
 static Boolean socketconnectflag;
-static int port;
+/*static int port;
 static NSString *ip;
-static NSData *packet;
+static NSData *packet;*/
 
-@interface AbstractUdpSocket : NSObject <AsyncUdpSocketDelegate>
+@interface AbstractUdpSocket : NSObject
 {
     OnReceiverMessageListener *msgListener;
     OnIfSucceedMessageListener *onIfSucceedMessageListener;
-@private NSData *packet;
+    NSData *packet;
+    int port;
+    NSString *ip;
 }
 
 -(void)setUdpSocket:(NSString *)newIp :(int)newPort :(NSData *)data;

@@ -11,7 +11,7 @@
 
 static NSString *deviceNum;
 
-@interface SMDeviceGuid2ViewController : BaseViewController <UITextFieldDelegate>
+@interface SMDeviceGuid2ViewController : BaseViewController <UITextFieldDelegate, UIGestureRecognizerDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *txt_deviceNum;
 - (IBAction)btn_next_pressed:(id)sender;
 

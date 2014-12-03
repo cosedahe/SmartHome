@@ -15,7 +15,7 @@
     return YES;
     NSScanner* scan = [NSScanner scannerWithString:str];
     long val;
-    return[scan scanLongLong:&val] && [scan isAtEnd];
+    return[scan scanLongLong:(long long *)&val] && [scan isAtEnd];
 }
 
 @end

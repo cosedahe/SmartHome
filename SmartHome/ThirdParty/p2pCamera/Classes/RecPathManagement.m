@@ -33,11 +33,11 @@
 - (void) dealloc
 {
     if (IDArray != nil) {
-        [IDArray release];
+        //[IDArray release];
         IDArray = nil;
     }
 
-    [super dealloc];
+    //[super dealloc];
 }
 
 - (BOOL)InsertPath:(NSString *)did Date:(NSString *)strDate Path:(NSString *)strPath
@@ -73,7 +73,7 @@
             [_recArray addObject:strPath];
             NSDictionary *_dateDic = [NSDictionary dictionaryWithObject:_recArray forKey:strDate];
             [dateArray addObject:_dateDic];
-            [_recArray release];
+            //[_recArray release];
             return [recPathDBUtil InsertPath:did Date:strDate Path:strPath];
             
         }
@@ -90,8 +90,8 @@
     NSDictionary *_idDic = [NSDictionary dictionaryWithObject:_dateArray forKey:did];
     [IDArray addObject:_idDic];
     
-    [_recArray release];
-    [_dateArray release];
+    //[_recArray release];
+    //[_dateArray release];
     
     return [recPathDBUtil InsertPath:did Date:strDate Path:strPath];
     
@@ -131,7 +131,7 @@
             [_recArray addObject:strPath];
             NSDictionary *_dateDic = [NSDictionary dictionaryWithObject:_recArray forKey:strDate];
             [dateArray addObject:_dateDic];
-            [_recArray release];
+            //[_recArray release];
             return TRUE;
             
         }
@@ -148,8 +148,8 @@
     NSDictionary *_idDic = [NSDictionary dictionaryWithObject:_dateArray forKey:did];
     [IDArray addObject:_idDic];
     
-    [_recArray release];
-    [_dateArray release];
+    //[_recArray release];
+    //[_dateArray release];
     
     return TRUE;
     
@@ -325,8 +325,8 @@
         }
     }
     NSDictionary *picDic=[NSDictionary dictionaryWithObjectsAndKeys:sum,@"sum",img,@"img",nil];
-    [picDic retain];
-    [picDic autorelease];
+    //[picDic retain];
+    //[picDic autorelease];
     return picDic;
 
 }

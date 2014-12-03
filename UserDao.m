@@ -173,7 +173,7 @@
 {
     UserBean *userBean = [[UserBean alloc] init];
     [userBean setId:sqlite3_column_int(statement, 0)];
-    [userBean setName:[[NSString alloc] initWithUTF8String:sqlite3_column_text(statement, 1)]];
+    [userBean setName:[[NSString alloc] initWithUTF8String:(char *)sqlite3_column_text(statement, 1)]];
     [userBean setDevice_number:sqlite3_column_int64(statement, 2)];
     
     return userBean;

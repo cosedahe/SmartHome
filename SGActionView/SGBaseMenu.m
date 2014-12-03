@@ -70,7 +70,7 @@
 - (BOOL)nicePerformance{
     size_t size;
     sysctlbyname("hw.machine", NULL, &size, NULL, 0);
-    char *name = malloc(size);
+    char *name = (char *)malloc(size);
     sysctlbyname("hw.machine", name, &size, NULL, 0);
     
     NSString *machine = [NSString stringWithCString:name encoding:NSUTF8StringEncoding];

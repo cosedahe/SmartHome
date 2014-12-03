@@ -234,11 +234,11 @@
 {
     RoomBean *roomBean = [[RoomBean alloc] init];
     [roomBean setId:sqlite3_column_int(statement, 0)];
-    [roomBean setName:[[NSString alloc] initWithUTF8String:sqlite3_column_text(statement, 1)]];
-    [roomBean setUserName:[[NSString alloc] initWithUTF8String:sqlite3_column_text(statement, 2)]];
+    [roomBean setName:[[NSString alloc] initWithUTF8String:(char *)sqlite3_column_text(statement, 1)]];
+    [roomBean setUserName:[[NSString alloc] initWithUTF8String:(char *)sqlite3_column_text(statement, 2)]];
     [roomBean setDeviceNum:sqlite3_column_int64(statement, 3)];
-    [roomBean setDescription:[[NSString alloc] initWithUTF8String:sqlite3_column_text(statement, 4)]];
-    [roomBean setImagePath:[[NSString alloc] initWithUTF8String:sqlite3_column_text(statement, 5)]];
+    [roomBean setDescription:[[NSString alloc] initWithUTF8String:(char *)sqlite3_column_text(statement, 4)]];
+    [roomBean setImagePath:[[NSString alloc] initWithUTF8String:(char *)sqlite3_column_text(statement, 5)]];
     
     return roomBean;
 }

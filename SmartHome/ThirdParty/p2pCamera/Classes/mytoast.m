@@ -51,7 +51,7 @@
 - (void)__animationDidStop:(NSString *)animationID __finished:(NSNumber *)finished __context:(void *)context {
     if ([animationID isEqualToString:@"hide"]) {
         [self removeFromSuperview];
-        self = nil;
+        //self = nil;
     }
     else if ([animationID isEqualToString:@"show"]) {
         [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(__hide) userInfo:nil repeats:NO];
@@ -65,11 +65,11 @@
     
     UILabel *textLabel = [[UILabel alloc] init];
     textLabel.backgroundColor = [UIColor clearColor];
-    textLabel.textAlignment = UITextAlignmentCenter;
+    //textLabel.textAlignment = UITextAlignmentCenter;
     textLabel.font = [UIFont systemFontOfSize:14];
     textLabel.textColor = RGB(255, 255, 255);
     textLabel.numberOfLines = 0;
-    textLabel.lineBreakMode = UILineBreakModeWordWrap;
+    //textLabel.lineBreakMode = UILineBreakModeWordWrap;
     CGSize sz = [text sizeWithFont:textLabel.font
                  constrainedToSize:CGSizeMake(width - 20.0f, 9999.0f)
                      lineBreakMode:textLabel.lineBreakMode];
@@ -99,7 +99,7 @@
     tmpRect.size = sz;
     textLabel.frame = tmpRect;
     [toast addSubview:textLabel];
-    [textLabel release];
+    //[textLabel release];
     toast.alpha = 0.0f;
     
     return toast;
@@ -132,7 +132,7 @@
     tmpRect.size = sz;
     imageView.frame = tmpRect;
     [toast addSubview:imageView];
-    [imageView release];
+    //[imageView release];
     toast.alpha = 0.0f;
     return toast;
 }
@@ -145,7 +145,7 @@
     
     UIWindow *mainWindow = [[UIApplication sharedApplication] keyWindow];
     [mainWindow addSubview:toast];
-    [toast release];
+    //[toast release];
     
     [toast __show];
 }
@@ -159,7 +159,7 @@
     mytoast *toast = [mytoast __createWithImage:image];
     UIWindow *mainWindow = [[UIApplication sharedApplication] keyWindow];
     [mainWindow addSubview:toast];
-    [toast release];
+    //[toast release];
     [toast __show];
 }
 

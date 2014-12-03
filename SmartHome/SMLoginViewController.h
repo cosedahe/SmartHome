@@ -7,7 +7,7 @@
 //
 
 #import "SMLoginBaseViewController.h"
-@interface SMLoginViewController : SMLoginBaseViewController <UIAlertViewDelegate, UITextFieldDelegate>
+@interface SMLoginViewController : SMLoginBaseViewController <UIAlertViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, MBProgressHUDDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *login_username;
 @property (weak, nonatomic) IBOutlet UITextField *login_password;
 @property (weak, nonatomic) IBOutlet UIView *contentView;

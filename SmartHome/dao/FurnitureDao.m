@@ -188,11 +188,11 @@
     FurnitureBean *bean = [[FurnitureBean alloc] init];
     [bean setId:sqlite3_column_int(statement, 0)];
     [bean setRoomId:sqlite3_column_int(statement, 1)];
-    [bean setName:[[NSString alloc] initWithUTF8String:sqlite3_column_text(statement, 2)]];
-    [bean setTag:[[NSString alloc] initWithUTF8String:sqlite3_column_text(statement, 3)]];
+    [bean setName:[[NSString alloc] initWithUTF8String:(char *)sqlite3_column_text(statement, 2)]];
+    [bean setTag:[[NSString alloc] initWithUTF8String:(char *)sqlite3_column_text(statement, 3)]];
     [bean setDowncode:sqlite3_column_int64(statement, 4)];
-    [bean setDescription:[[NSString alloc] initWithUTF8String:sqlite3_column_text(statement, 5)]];
-    [bean setLastdo:[[NSString alloc] initWithUTF8String:sqlite3_column_text(statement, 6)]];
+    [bean setDescription:[[NSString alloc] initWithUTF8String:(char *)sqlite3_column_text(statement, 5)]];
+    [bean setLastdo:[[NSString alloc] initWithUTF8String:(char *)sqlite3_column_text(statement, 6)]];
     
     return bean;
 }

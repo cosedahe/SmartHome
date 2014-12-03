@@ -9,7 +9,7 @@
 #import "SMLoginBaseViewController.h"
 
 
-@interface SMRegestViewController : SMLoginBaseViewController <UIAlertViewDelegate, UITextFieldDelegate>
+@interface SMRegestViewController : SMLoginBaseViewController <UIAlertViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, MBProgressHUDDelegate>
 {
     int viewOffsetY;
 }

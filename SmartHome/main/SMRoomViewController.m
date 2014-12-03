@@ -125,7 +125,7 @@ static int newButtonNumber = 0;
         [cell.button_stop setHidden:YES];
         [cell.button_turnon setHidden:YES];
     }
-    cell.accessoryType = UITableViewCellSelectionStyleNone/*UITableViewCellAccessoryDisclosureIndicator*/;
+    cell.accessoryType = UITableViewCellAccessoryNone/*UITableViewCellAccessoryDisclosureIndicator*/;
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
 #warning should be deleted?
     //[self initDao:cell];
@@ -198,6 +198,18 @@ static int newButtonNumber = 0;
         {
             
             [self performSegueWithIdentifier:@"room_to_television" sender:self];
+        }
+        @catch(NSException *e)
+        {
+            NSLog(@"%@",e);
+        }
+    }
+    else if([[furniture getTag] isEqualToString:@"camera"])
+    {
+        @try
+        {
+            
+            [self performSegueWithIdentifier:@"room_to_camera" sender:self];
         }
         @catch(NSException *e)
         {

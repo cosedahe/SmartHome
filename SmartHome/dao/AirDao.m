@@ -221,11 +221,11 @@
 {
     AirBean *bean = [[AirBean alloc] init];
     [bean setId:sqlite3_column_int(statement, 0)];
-    [bean setName:[[NSString alloc] initWithUTF8String:sqlite3_column_text(statement, 1)]];
+    [bean setName:[[NSString alloc] initWithUTF8String:(char *)sqlite3_column_text(statement, 1)]];
     [bean setDowncode:sqlite3_column_int64(statement, 2)];
-    [bean setTmp:[[NSString alloc] initWithUTF8String:sqlite3_column_text(statement, 3)]];
-    [bean setWindspeed:[[NSString alloc] initWithUTF8String:sqlite3_column_text(statement, 4)]];
-    [bean setModel:[[NSString alloc] initWithUTF8String:sqlite3_column_text(statement, 5)]];
+    [bean setTmp:[[NSString alloc] initWithUTF8String:(char *)sqlite3_column_text(statement, 3)]];
+    [bean setWindspeed:[[NSString alloc] initWithUTF8String:(char *)sqlite3_column_text(statement, 4)]];
+    [bean setModel:[[NSString alloc] initWithUTF8String:(char *)sqlite3_column_text(statement, 5)]];
     [bean setFurnitureid:sqlite3_column_int(statement, 4)];
     [bean setStudy:sqlite3_column_int(statement, 5)];
     

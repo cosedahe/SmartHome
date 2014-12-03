@@ -9,7 +9,7 @@
 #import "SMLoginBaseViewController.h"
 #import "Socket/SocketMessage.h"
 
-@interface SMRefindPwdViewController : SMLoginBaseViewController <UIAlertViewDelegate, UITextFieldDelegate>
+@interface SMRefindPwdViewController : SMLoginBaseViewController <UIAlertViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, MBProgressHUDDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *usernameTextField;
 
 - (IBAction)btn_back_onClick:(id)sender;

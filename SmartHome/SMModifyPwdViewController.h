@@ -9,7 +9,7 @@
 #import "SMLoginBaseViewController.h"
 #import "Socket/SocketMessage.h"
 
-@interface SMModifyPwdViewController : SMLoginBaseViewController <UIAlertViewDelegate, UITextFieldDelegate>
+@interface SMModifyPwdViewController : SMLoginBaseViewController <UIAlertViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, MBProgressHUDDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *usernameTextField;
 @property (weak, nonatomic) IBOutlet UITextField *oldpwdTextField;
 

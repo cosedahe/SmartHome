@@ -9,8 +9,6 @@
 #import "UDPSocketTask.h"
 #import "SocketMessage.h"
 
-static int port;
-static NSString *ip;
 static UDPSocketTask *repairSendSocketTask;
 
 

@@ -30,7 +30,7 @@ CLocalPlayback::~CLocalPlayback()
 {
     StopPlayback();
     if (m_playbackLock != nil) {
-        [m_playbackLock release];
+        //[m_playbackLock release];
         m_playbackLock = nil;
     }
     sumTime=0;
@@ -38,10 +38,10 @@ CLocalPlayback::~CLocalPlayback()
 void* CLocalPlayback::UpdateTimeThread(void *param){
    
     CLocalPlayback *pPlayback = (CLocalPlayback*)param;
-    NSAutoreleasePool *apool = [[NSAutoreleasePool alloc] init];
+    //NSAutoreleasePool *apool = [[NSAutoreleasePool alloc] init];
     pPlayback->updateTimeProcess();
     
-    [apool release];
+    //[apool release];
     return  NULL;
 }
 void CLocalPlayback::updateTimeProcess(){
@@ -63,9 +63,9 @@ void CLocalPlayback::updateTimeProcess(){
 void* CLocalPlayback::PlaybackThread(void *param)
 {
     CLocalPlayback *pPlayback = (CLocalPlayback*)param;
-    NSAutoreleasePool *apool = [[NSAutoreleasePool alloc] init];
+    //NSAutoreleasePool *apool = [[NSAutoreleasePool alloc] init];
     pPlayback->PlaybackProcess();
-    [apool release];
+    //[apool release];
     
    // NSLog(@"PlaybackThread end");
     return NULL;
@@ -253,7 +253,7 @@ void CLocalPlayback::PlaybackProcess()
         
         //NSLog(@"timestamp: %d", datahead.timestamp);
        
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+        //NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
         if (filehead.videoformat == 0) {//MJPEG
             NSData *imgData = [NSData dataWithBytes:p length:datahead.datalen];
             UIImage *image = [UIImage imageWithData:imgData];
@@ -287,7 +287,7 @@ void CLocalPlayback::PlaybackProcess()
          
         }
      
-        [pool release];
+        //[pool release];
         
         if (oldtimestamp == 0) {
             oldtimestamp = datahead.timestamp;
