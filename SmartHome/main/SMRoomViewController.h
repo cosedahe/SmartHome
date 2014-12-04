@@ -14,6 +14,7 @@
 #import "SocketMessage.h"
 #import "../pojo/FurnitureBean.h"
 #import "BaseViewController.h"
+#import "CameraService.h"
 
 #define CELL_FURNITURE @"furniturecell"
 

@@ -31,45 +31,29 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self.playView setHidden:YES];
+    _cameraservice = [CameraService getInstance];
+    
     deviceList = [[NSMutableArray alloc] init];
-    _m_PPPPChannelMgt = new CPPPPChannelManagement();
-    _m_PPPPChannelMgt->pCameraViewController = self;
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didEnterBackground)
-                                                 name:UIApplicationDidEnterBackgroundNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(willEnterForeground)
-                                                 name:UIApplicationWillEnterForegroundNotification
-                                               object:nil];
+    _cameraservice.m_PPPPChannelMgt = new CPPPPChannelManagement();
+    //_cameraservice.m_PPPPChannelMgt->pCameraViewController = self;
     
-    [NSThread detachNewThreadSelector:@selector(Initialize) toTarget:self withObject:nil];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
+                                   initWithTarget:self
+                                   action:@selector(dismissKeyboard)];
+    [self.view addGestureRecognizer:tap];
+    // very important make delegate useful
+    tap.delegate = self;
 }
 
--(void)viewWillDisappear:(BOOL)animated
+-(void)viewDidAppear:(BOOL)animated
 {
-    [_m_PPPPChannelMgtCondition lock];
-    if (_m_PPPPChannelMgt == NULL) {
-        [_m_PPPPChannelMgtCondition unlock];
-        return;
-    }
-    _m_PPPPChannelMgt->StopAll();
-    [_m_PPPPChannelMgtCondition unlock];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    self.text_cameraID.text = [defaults objectForKey:CAM_ID];
+    self.text_user.text = [defaults objectForKey:CAM_USER];
+    self.text_pwd.text = [defaults objectForKey:CAM_PWD];
 }
 
-- (void) didEnterBackground{
-    [_m_PPPPChannelMgtCondition lock];
-    if (_m_PPPPChannelMgt == NULL) {
-        [_m_PPPPChannelMgtCondition unlock];
-        return;
-    }
-    _m_PPPPChannelMgt->StopAll();
-    [_m_PPPPChannelMgtCondition unlock];
-}
-
-- (void) willEnterForeground{
-    
-}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -84,51 +68,17 @@
     // Pass the selected object to the new view controller.
 }
 
--(void)Initialize
-{
-    PPPP_Initialize((char*)[@"EBGBEMBMKGJMGAJPEIGIFKEGHBMCHMJHCKBMBHGFBJNOLCOLCIEBHFOCCHKKJIKPBNMHLHCPPFMFADDFIINOIABFMH" UTF8String]);
-    st_PPPP_NetInfo NetInfo;
-    PPPP_NetworkDetect(&NetInfo, 0);
-}
-
 - (void)ConnectCam{
     _cameraID = self.text_cameraID.text;
     _user = self.text_user.text;
     _pwd = self.text_pwd.text;
     
-    [_m_PPPPChannelMgtCondition lock];
+    _cameraservice.cameraId = _cameraID;
+    _cameraservice.user = _user;
+    _cameraservice.pwd = _pwd;
     
-    if (_m_PPPPChannelMgt == NULL) {
-        [_m_PPPPChannelMgtCondition unlock];
-        return;
-    }
-    _m_PPPPChannelMgt->StopAll();
-
-    dispatch_async(dispatch_get_main_queue(),^{
-        _playView.image = nil;
-    });
     
-    [self performSelector:@selector(startPPPP:) withObject:_cameraID];
-    [_m_PPPPChannelMgtCondition unlock];
-}
-
-- (void) startPPPP:(NSString*) camID{
-#warning secrect code
-    _m_PPPPChannelMgt->Start([camID UTF8String], [_user UTF8String], [_pwd UTF8String]);
-    //[self performSelectorOnMainThread:@selector(starVideo) withObject:nil waitUntilDone:NO];
-    [NSThread detachNewThreadSelector:@selector(starVideo) toTarget:self withObject:nil];
-}
-
-- (void)starVideo{
-    [NSThread sleepForTimeInterval:5];
-    if (_m_PPPPChannelMgt != NULL) {
-        if (_m_PPPPChannelMgt->StartPPPPLivestream([_cameraID UTF8String], 10, self) == 0) {
-            _m_PPPPChannelMgt->StopPPPPAudio([_cameraID UTF8String]);
-            _m_PPPPChannelMgt->StopPPPPLivestream([_cameraID UTF8String]);
-        }
-        
-        _m_PPPPChannelMgt->GetCGI([_cameraID UTF8String], CGI_IEGET_CAM_PARAMS);
-    }
+    [self performSelectorOnMainThread:@selector(jump2play) withObject:nil waitUntilDone:NO];
 }
 
 - (IBAction)btn_connectCam_onClick:(id)sender {
@@ -136,22 +86,18 @@
 }
 
 - (IBAction)btn_back_onClick:(id)sender {
+    [_m_PPPPChannelMgtCondition lock];
+    if (_m_PPPPChannelMgt == NULL) {
+        [_m_PPPPChannelMgtCondition unlock];
+        [self dismissModalViewControllerAnimated:YES];
+        return;
+    }
+    _m_PPPPChannelMgt->StopAll();
+    [_m_PPPPChannelMgtCondition unlock];
     [self dismissModalViewControllerAnimated:YES];
 }
 
-
-//ImageNotifyProtocol
-- (void) ImageNotify: (UIImage *)image timestamp: (NSInteger)timestamp DID:(NSString *)did{
-    [self performSelector:@selector(refreshImage:) withObject:image];
-}
-- (void) YUVNotify: (Byte*) yuv length:(int)length width: (int) width height:(int)height timestamp:(unsigned int)timestamp DID:(NSString *)did{
-    UIImage* image = [APICommon YUV420ToImage:yuv width:width height:height];
-    [self performSelector:@selector(refreshImage:) withObject:image];
-}
-- (void) H264Data: (Byte*) h264Frame length: (int) length type: (int) type timestamp: (NSInteger) timestamp{
-    
-}
-
+#if 0
 //PPPPStatusDelegate
 - (void) PPPPStatus: (NSString*) strDID statusType:(NSInteger) statusType status:(NSInteger) status{
     NSString* strPPPPStatus;
@@ -176,6 +122,7 @@
             break;
         case PPPP_STATUS_ON_LINE:
             strPPPPStatus = NSLocalizedStringFromTable(@"PPPPStatusOnline", @STR_LOCALIZED_FILE_NAME, nil);
+            //[self performSelectorOnMainThread:@selector(jump) withObject:nil waitUntilDone:NO];
             break;
         case PPPP_STATUS_DEVICE_NOT_ON_LINE:
             strPPPPStatus = NSLocalizedStringFromTable(@"CameraIsNotOnline", @STR_LOCALIZED_FILE_NAME, nil);
@@ -192,20 +139,28 @@
     }
     NSLog(@"PPPPStatus  %@",strPPPPStatus);
 }
+#endif
 
-//refreshImage
-- (void) refreshImage:(UIImage* ) image{
-    if (image != nil) {
-        dispatch_async(dispatch_get_main_queue(),^{
-            _playView.image = image;
-        });
-    }
+-(void)jump2play
+{
+#warning jump to play view
+    [self performSegueWithIdentifier:@"camera_to_play" sender:self];
+
 }
 
 - (IBAction)startSearch:(id)sender
 {
     [self stopSearch];
     [deviceList removeAllObjects];
+    
+    // show loading
+    _progress = [[MBProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:_progress];
+    _progress.delegate = self;
+    _progress.labelText = @"正在搜索...";
+    [self.view bringSubviewToFront:_progress];
+    _progress.removeFromSuperViewOnHide = YES;
+    [_progress show:YES];
     
     dvs = new CSearchDVS();
     dvs->searchResultDelegate = self;
@@ -221,12 +176,23 @@
 
 - (void) stopSearch
 {
+    if(_progress)
+    {
+        [_progress removeFromSuperview];
+        // [_progress release];
+        _progress = nil;
+    }
+    
     if (dvs != NULL) {
         SAFE_DELETE(dvs);
     }
 
     if([deviceList count] == 0)
+    {
+        UIAlertView *alertview = [[UIAlertView alloc] initWithTitle:@"警告" message:@"没有找到设备!" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [alertview show];
         return;
+    }
     
     // show choose menu
     NSMutableArray *devName = [[NSMutableArray alloc] init];
@@ -265,19 +231,18 @@
     [deviceList addObject:dev];
 }
 
-- (IBAction)ptzController:(id)sender{
-    /*摄像机需在线状态*/
-    _m_PPPPChannelMgt->PTZ_Control([_cameraID UTF8String], CMD_PTZ_UP);
-    _m_PPPPChannelMgt->PTZ_Control([_cameraID UTF8String], CMD_PTZ_UP_STOP);
+#pragma mark - UITextField Delegate Method
+- (BOOL) textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
 }
 
-#pragma mark -
-#pragma mark ParamNotifyProtocol
-- (void) ParamNotify: (int) paramType params:(void*) params{
-    if (paramType == CGI_IEGET_CAM_PARAMS) {
-        PSTRU_CAMERA_PARAM param = (PSTRU_CAMERA_PARAM) params;
-        flip = param->flip;
-    }
+// tap dismiss keyboard
+-(void)dismissKeyboard {
+    [self.view endEditing:YES];
+    //[self.login_username resignFirstResponder];
+    //[self.login_password resignFirstResponder];
 }
 
 @end

@@ -154,7 +154,11 @@ static SocketMessage *socketMessage;
             break;
     }*/
     
-    [NSThread sleepForTimeInterval:2];
+    while(!onSucceedListener.dataReceived)
+    {
+        [NSThread sleepForTimeInterval:1];
+    }
+    onSucceedListener.dataReceived = NO;
     
     if(_progress)
     {

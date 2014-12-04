@@ -43,6 +43,16 @@
 
 -(void)getSocketMessage:(NSString *)result
 {
+    if([result isEqualToString:@""]) // nothing in result, receive timeout
+    {
+        [onIfSucceedMessageListener getTimeOutMessage:@"timeout"];
+        if(msgListener != nil)
+        {
+            [msgListener getAlarmBellMessage:[SocketChatUtils getCode:result]];
+        }
+        
+    }
+    
     NSString *protocol = [SocketChatUtils getprotocol:result :PROTOCOL];
     NSLog(@"protocol:%@",protocol);
     
@@ -257,36 +267,42 @@ int count = 0;
     fcntl(sock, F_SETFL, flags | O_NONBLOCK);
     FD_ZERO(&writefds);
     FD_SET(sock, &writefds);
-    if(select(sock+1, NULL, &writefds, NULL, &tv_out) > 0)
+    @try
     {
-        if(FD_ISSET(sock, &writefds) > 0)
+        if(select(sock+1, NULL, &writefds, NULL, &tv_out) > 0)
         {
-            if (sendto(sock,
-                       cmsg,
-                       echolen,
-                       0,
-                       (struct sockaddr *) &destination,
-                       sizeof(destination)) != echolen)
+            if(FD_ISSET(sock, &writefds) > 0)
             {
-                printf("Mismatch in number of sent bytes, errno = %d\n", errno);
-                return false;
-            }
-            else
-            {
-                socketId = sock;
-                BOOL ret = [self receiveThread];
-                if(ret)
+                count++;
+                if (sendto(sock,
+                           cmsg,
+                           echolen,
+                           0,
+                           (struct sockaddr *) &destination,
+                           sizeof(destination)) != echolen)
                 {
-                    count = 0;
-                    return true;
+                    printf("Mismatch in number of sent bytes, errno = %d\n", errno);
+                    return false;
                 }
-                else if(count < 2)
+                else
                 {
-                    count++;
-                    [self sendAndReceive:msg ipAddress:ip port:p];
+                    socketId = sock;
+                    BOOL ret = [self receiveThread];
+                    if(ret)
+                    {
+                        return true;
+                    }
+                    else if(count < 3)
+                    {
+                        [self sendAndReceive:msg ipAddress:ip port:p];
+                    }
                 }
             }
         }
+    }
+    @catch(NSException *e)
+    {
+        NSLog(@"%@", e);
     }
     
     count = 0;
@@ -314,43 +330,55 @@ int count = 0;
     /* use select instead */
     FD_ZERO(&readfds);
     FD_SET(socketId, &readfds);
-    if(select(socketId+1, &readfds, NULL, NULL, &tv_out) > 0)
+    @try
     {
-        if(FD_ISSET(socketId, &readfds) > 0)
+        if(select(socketId+1, &readfds, NULL, NULL, &tv_out) > 0)
         {
-
-            int len = recvfrom(socketId, buffer, sizeof(buffer), 0, (struct sockaddr*)&destination, (socklen_t *)&addr_len);
-            if(len<0)
-                printf("####%d\n", errno);
-            if(len>0)
+            if(FD_ISSET(socketId, &readfds) > 0)
             {
-                NSString *myData = [[NSString alloc] initWithCString:buffer encoding:NSASCIIStringEncoding];
-                NSLog(@"UDP socket receive packet!, data = %@", myData);
-                
-                packet = [myData dataUsingEncoding:NSASCIIStringEncoding];
-                if([@"upcodes" isEqualToString:TYPE])
+
+                int len = recvfrom(socketId, buffer, sizeof(buffer), 0, (struct sockaddr*)&destination, (socklen_t *)&addr_len);
+                if(len<0)
+                    printf("####%d\n", errno);
+                if(len>0)
                 {
-                    NSLog(@"Receive upcodes");
-                    result = [[SocketMessage getInstance] getUdpSocketByCode:myData];
-                    /*if (result)
+                    NSString *myData = [[NSString alloc] initWithCString:buffer encoding:NSASCIIStringEncoding];
+                    NSLog(@"UDP socket receive packet!, data = %@", myData);
+                    
+                    packet = [myData dataUsingEncoding:NSASCIIStringEncoding];
+                    if([@"upcodes" isEqualToString:TYPE])
                     {
-                        [self getSocketMessage:result];
-                    }*/
-                }
-                else
-                {
-                    result = [self getUdpSocket:myData];
-                    /*if(result)
+                        NSLog(@"Receive upcodes");
+                        result = [[SocketMessage getInstance] getUdpSocketByCode:myData];
+                        /*if (result)
+                        {
+                            [self getSocketMessage:result];
+                        }*/
+                    }
+                    else
                     {
-                        [self getSocketMessage:result];
-                    }*/
+                        result = [self getUdpSocket:myData];
+                        /*if(result)
+                        {
+                            [self getSocketMessage:result];
+                        }*/
+                    }
+                    ret = true;
                 }
-                ret = true;
             }
         }
     }
+    @catch(NSException *e)
+    {
+        NSLog(@"%@", e);
+    }
     
     if(result)
+    {
+        count = 0;
+        [self getSocketMessage:result];
+    }
+    else if(count >= 3)
     {
         [self getSocketMessage:result];
     }

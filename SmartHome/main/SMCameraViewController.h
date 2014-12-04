@@ -13,17 +13,24 @@
 #import "SearchCameraResultProtocol.h"
 #import "SearchDVS.h"
 #import "ParamNotifyProtocol.h"
+#import "CameraService.h"
+#import "MBProgressHUD.h"
 
-@interface SMCameraViewController : BaseViewController <ImageNotifyProtocol, SearchCameraResultProtocol, ParamNotifyProtocol>
+@interface SMCameraViewController : BaseViewController <SearchCameraResultProtocol, UIGestureRecognizerDelegate, MBProgressHUDDelegate>
 {
     CSearchDVS* dvs;
     /*镜像参数*/
     int flip;
     NSMutableArray *deviceList;
 }
+@property MBProgressHUD *progress;
+
 @property (nonatomic, retain) NSCondition* m_PPPPChannelMgtCondition;
 @property CPPPPChannelManagement *m_PPPPChannelMgt;
+@property CameraService *cameraservice;
 @property (nonatomic, retain) IBOutlet UIImageView* playView;
+@property (weak, nonatomic) IBOutlet UIView *view1;
+@property (weak, nonatomic) IBOutlet UIView *view2;
 
 @property (nonatomic, retain) NSTimer* searchTimer;
 @property NSString *cameraID;

@@ -486,7 +486,6 @@
 		145110431A1B31F500AC0946 /* SGBaseMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 1451103C1A1B31F400AC0946 /* SGBaseMenu.m */; };
 		145110441A1B31F500AC0946 /* SGGridMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 1451103E1A1B31F400AC0946 /* SGGridMenu.m */; };
 		145110451A1B31F500AC0946 /* SGSheetMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 145110401A1B31F400AC0946 /* SGSheetMenu.m */; };
-		145110481A1B351100AC0946 /* SMRoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 145110471A1B351100AC0946 /* SMRoomViewController.m */; };
 		1451104B1A1B376400AC0946 /* FurnitureDao.m in Sources */ = {isa = PBXBuildFile; fileRef = 1451104A1A1B376400AC0946 /* FurnitureDao.m */; };
 		1451104E1A1B37DB00AC0946 /* FurnitureBean.m in Sources */ = {isa = PBXBuildFile; fileRef = 1451104D1A1B37DB00AC0946 /* FurnitureBean.m */; };
 		145110581A1B4A8D00AC0946 /* add_room_breakgroundmusic1.png in Resources */ = {isa = PBXBuildFile; fileRef = 1451104F1A1B4A8D00AC0946 /* add_room_breakgroundmusic1.png */; };
@@ -524,7 +523,10 @@
 		14A82B281A2EB26C00127E0E /* libpostproc.pc in Resources */ = {isa = PBXBuildFile; fileRef = 14A82B181A2EB26C00127E0E /* libpostproc.pc */; };
 		14A82B291A2EB26C00127E0E /* libswresample.pc in Resources */ = {isa = PBXBuildFile; fileRef = 14A82B191A2EB26C00127E0E /* libswresample.pc */; };
 		14A82B2A1A2EB26C00127E0E /* libswscale.pc in Resources */ = {isa = PBXBuildFile; fileRef = 14A82B1A1A2EB26C00127E0E /* libswscale.pc */; };
-		14CBB42F1A2F2E9A00780FB0 /* SMPlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14CBB42E1A2F2E9A00780FB0 /* SMPlayViewController.m */; };
+		14CBB4341A2F3DEA00780FB0 /* SMPlayViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 14CBB4331A2F3DEA00780FB0 /* SMPlayViewController.mm */; };
+		14CBB4361A2F43F100780FB0 /* CameraService.mm in Sources */ = {isa = PBXBuildFile; fileRef = 14CBB4351A2F43F100780FB0 /* CameraService.mm */; };
+		14CBB4381A301EEE00780FB0 /* SMRoomViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 14CBB4371A301EEE00780FB0 /* SMRoomViewController.mm */; };
+		14CBB4401A303C3200780FB0 /* SMCameraSettingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 14CBB43F1A303C3200780FB0 /* SMCameraSettingViewController.mm */; };
 		14E689491A1456F100366F25 /* OnReceiverMessageListener.m in Sources */ = {isa = PBXBuildFile; fileRef = 14E689481A1456F100366F25 /* OnReceiverMessageListener.m */; };
 /* End PBXBuildFile section */
 
@@ -1131,7 +1133,6 @@
 		1451103F1A1B31F400AC0946 /* SGSheetMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SGSheetMenu.h; path = SGActionView/SGSheetMenu.h; sourceTree = "<group>"; };
 		145110401A1B31F400AC0946 /* SGSheetMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SGSheetMenu.m; path = SGActionView/SGSheetMenu.m; sourceTree = "<group>"; };
 		145110461A1B351100AC0946 /* SMRoomViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SMRoomViewController.h; path = SmartHome/main/SMRoomViewController.h; sourceTree = "<group>"; };
-		145110471A1B351100AC0946 /* SMRoomViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SMRoomViewController.m; path = SmartHome/main/SMRoomViewController.m; sourceTree = "<group>"; };
 		145110491A1B376400AC0946 /* FurnitureDao.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FurnitureDao.h; path = SmartHome/dao/FurnitureDao.h; sourceTree = "<group>"; };
 		1451104A1A1B376400AC0946 /* FurnitureDao.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FurnitureDao.m; path = SmartHome/dao/FurnitureDao.m; sourceTree = "<group>"; };
 		1451104C1A1B37DB00AC0946 /* FurnitureBean.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FurnitureBean.h; path = SmartHome/pojo/FurnitureBean.h; sourceTree = "<group>"; };
@@ -1253,7 +1254,12 @@
 		14A82B191A2EB26C00127E0E /* libswresample.pc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = libswresample.pc; sourceTree = "<group>"; };
 		14A82B1A1A2EB26C00127E0E /* libswscale.pc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = libswscale.pc; sourceTree = "<group>"; };
 		14CBB42D1A2F2E9A00780FB0 /* SMPlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SMPlayViewController.h; path = SmartHome/main/SMPlayViewController.h; sourceTree = "<group>"; };
-		14CBB42E1A2F2E9A00780FB0 /* SMPlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SMPlayViewController.m; path = SmartHome/main/SMPlayViewController.m; sourceTree = "<group>"; };
+		14CBB4301A2F3A7C00780FB0 /* CameraService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CameraService.h; path = service/CameraService.h; sourceTree = "<group>"; };
+		14CBB4331A2F3DEA00780FB0 /* SMPlayViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SMPlayViewController.mm; path = SmartHome/main/SMPlayViewController.mm; sourceTree = "<group>"; };
+		14CBB4351A2F43F100780FB0 /* CameraService.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CameraService.mm; path = service/CameraService.mm; sourceTree = "<group>"; };
+		14CBB4371A301EEE00780FB0 /* SMRoomViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SMRoomViewController.mm; path = SmartHome/main/SMRoomViewController.mm; sourceTree = "<group>"; };
+		14CBB43C1A3031CE00780FB0 /* SMCameraSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SMCameraSettingViewController.h; path = SmartHome/main/SMCameraSettingViewController.h; sourceTree = "<group>"; };
+		14CBB43F1A303C3200780FB0 /* SMCameraSettingViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SMCameraSettingViewController.mm; path = SmartHome/main/SMCameraSettingViewController.mm; sourceTree = "<group>"; };
 		14E689471A1456F100366F25 /* OnReceiverMessageListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OnReceiverMessageListener.h; path = SmartHome/Socket/OnReceiverMessageListener.h; sourceTree = "<group>"; };
 		14E689481A1456F100366F25 /* OnReceiverMessageListener.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OnReceiverMessageListener.m; path = SmartHome/Socket/OnReceiverMessageListener.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1382,10 +1388,10 @@
 		0424FEA819CAD00F003E4B7F /* Socket */ = {
 			isa = PBXGroup;
 			children = (
-				1450F0CE1A2EC4BB00290DED /* AbstractUdpSocket.mm */,
 				143C1EE51A0CB0AE00910987 /* UDPSocketTask.h */,
 				143C1EE61A0CB0AE00910987 /* UDPSocketTask.m */,
 				143C1ED71A0CB09200910987 /* AbstractUdpSocket.h */,
+				1450F0CE1A2EC4BB00290DED /* AbstractUdpSocket.mm */,
 				143C1EDD1A0CB09200910987 /* SocketMessage.h */,
 				143C1EDE1A0CB09200910987 /* SocketMessage.m */,
 				14E689471A1456F100366F25 /* OnReceiverMessageListener.h */,
@@ -1696,7 +1702,7 @@
 				1451102F1A1B03CB00AC0946 /* SMRoomViewCell.h */,
 				145110301A1B03CB00AC0946 /* SMRoomViewCell.m */,
 				145110461A1B351100AC0946 /* SMRoomViewController.h */,
-				145110471A1B351100AC0946 /* SMRoomViewController.m */,
+				14CBB4371A301EEE00780FB0 /* SMRoomViewController.mm */,
 				140839EF1A2461B400CEB56E /* SMAddAriconditionViewController.h */,
 				140839F01A2461B400CEB56E /* SMAddAriconditionViewController.m */,
 				14083A9D1A2807AE00CEB56E /* SMCurtainViewController.h */,
@@ -1710,7 +1716,9 @@
 				1450F0D21A2ED2B000290DED /* SMCameraViewController.h */,
 				1450F0D31A2ED2B100290DED /* SMCameraViewController.mm */,
 				14CBB42D1A2F2E9A00780FB0 /* SMPlayViewController.h */,
-				14CBB42E1A2F2E9A00780FB0 /* SMPlayViewController.m */,
+				14CBB4331A2F3DEA00780FB0 /* SMPlayViewController.mm */,
+				14CBB43C1A3031CE00780FB0 /* SMCameraSettingViewController.h */,
+				14CBB43F1A303C3200780FB0 /* SMCameraSettingViewController.mm */,
 			);
 			name = main;
 			path = ..;
@@ -2143,6 +2151,8 @@
 				145110771A1C68A600AC0946 /* WidgetService.m */,
 				14083A831A24CCA900CEB56E /* AirService.h */,
 				14083A841A24CCA900CEB56E /* AirService.m */,
+				14CBB4301A2F3A7C00780FB0 /* CameraService.h */,
+				14CBB4351A2F43F100780FB0 /* CameraService.mm */,
 			);
 			name = service;
 			sourceTree = "<group>";
@@ -2836,7 +2846,6 @@
 				0443E67D19CADE4F0053B620 /* SMSocketMessage.m in Sources */,
 				145110221A19DDF700AC0946 /* addRoomAlertView.m in Sources */,
 				1450F17D1A2EDF8900290DED /* CircleBuf.mm in Sources */,
-				145110481A1B351100AC0946 /* SMRoomViewController.m in Sources */,
 				145110281A19E7F300AC0946 /* RoomBean.m in Sources */,
 				1450F0D41A2ED2B100290DED /* SMCameraViewController.mm in Sources */,
 				145110441A1B31F500AC0946 /* SGGridMenu.m in Sources */,
@@ -2850,6 +2859,7 @@
 				1450F1851A2EDF8900290DED /* PCMRecorder.mm in Sources */,
 				1450F18A1A2EDF8900290DED /* RecPathDBUtils.mm in Sources */,
 				1450F17E1A2EDF8900290DED /* CustomAVRecorder.mm in Sources */,
+				14CBB4341A2F3DEA00780FB0 /* SMPlayViewController.mm in Sources */,
 				145110781A1C68A600AC0946 /* WidgetService.m in Sources */,
 				1450F0CF1A2EC4BB00290DED /* AbstractUdpSocket.mm in Sources */,
 				14510FFC1A15FF6B00AC0946 /* UserBean.m in Sources */,
@@ -2874,9 +2884,11 @@
 				14083A881A25612C00CEB56E /* MiddleBean.m in Sources */,
 				0424FE9E19CACF06003E4B7F /* SMRegestViewController.m in Sources */,
 				14A8293A1A2BFE7600127E0E /* SMDeviceControlViewController.m in Sources */,
+				14CBB4401A303C3200780FB0 /* SMCameraSettingViewController.mm in Sources */,
 				143C1E6F1A086A2300910987 /* IQKeyboardManager.m in Sources */,
 				143C1EE41A0CB09200910987 /* SocketMessage.m in Sources */,
 				04C0433119AB054A00613062 /* SMViewController.m in Sources */,
+				14CBB4361A2F43F100780FB0 /* CameraService.mm in Sources */,
 				143C1EE71A0CB0AE00910987 /* UDPSocketTask.m in Sources */,
 				1451101F1A19C46200AC0946 /* SMHomeTableViewController.m in Sources */,
 				1451106D1A1C29ED00AC0946 /* SMFurnitureTableViewCell.m in Sources */,
@@ -2892,7 +2904,6 @@
 				145110451A1B31F500AC0946 /* SGSheetMenu.m in Sources */,
 				145110311A1B03CB00AC0946 /* SMRoomViewCell.m in Sources */,
 				14083A9F1A2807AE00CEB56E /* SMCurtainViewController.m in Sources */,
-				14CBB42F1A2F2E9A00780FB0 /* SMPlayViewController.m in Sources */,
 				143C1EED1A120BFA00910987 /* SocketChatUtils.m in Sources */,
 				0443E67F19CADE4F0053B620 /* SMWidget.m in Sources */,
 				14510FF91A15FE9700AC0946 /* BaseBean.m in Sources */,
@@ -2903,6 +2914,7 @@
 				1450F1781A2EDF8900290DED /* Adpcm.mm in Sources */,
 				0424FEA119CACF52003E4B7F /* SMRefindPwdViewController.m in Sources */,
 				143C1EEA1A120B2B00910987 /* ChatUtils.m in Sources */,
+				14CBB4381A301EEE00780FB0 /* SMRoomViewController.mm in Sources */,
 				140839F11A2461B400CEB56E /* SMAddAriconditionViewController.m in Sources */,
 				04C0432719AB054A00613062 /* main.m in Sources */,
 				1451104B1A1B376400AC0946 /* FurnitureDao.m in Sources */,

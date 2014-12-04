@@ -206,10 +206,22 @@ static int newButtonNumber = 0;
     }
     else if([[furniture getTag] isEqualToString:@"camera"])
     {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSString *cameraID = [[NSString alloc] initWithString:[defaults objectForKey:CAM_ID]];
+        NSString *user = [[NSString alloc] initWithString:[defaults objectForKey:CAM_USER]];
+        NSString *pwd = [[NSString alloc] initWithString:[defaults objectForKey:CAM_PWD]];
         @try
         {
-            
-            [self performSegueWithIdentifier:@"room_to_camera" sender:self];
+            if([cameraID isEqualToString:@""] || [user isEqualToString:@""] || [pwd isEqualToString:@""])
+                [self performSegueWithIdentifier:@"room_to_camera" sender:self];
+            else
+            {
+                CameraService *service = [CameraService getInstance];
+                [service setCameraId:cameraID];
+                [service setUser:user];
+                [service setPwd:pwd];
+                [self performSegueWithIdentifier:@"room_to_cameraplay" sender:self];
+            }
         }
         @catch(NSException *e)
         {
@@ -226,7 +238,7 @@ static int newButtonNumber = 0;
 {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    if(![segue.identifier isEqualToString:@"room_to_camera"])
+    if(![segue.identifier isEqualToString:@"room_to_camera"] && ![segue.identifier isEqualToString:@"room_to_cameraplay"])
     {
         id theSegue = segue.destinationViewController;
         [theSegue setValue:furniture forKey:@"furniture"];
