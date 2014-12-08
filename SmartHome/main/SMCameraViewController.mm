@@ -35,7 +35,6 @@
     _cameraservice = [CameraService getInstance];
     
     deviceList = [[NSMutableArray alloc] init];
-    _cameraservice.m_PPPPChannelMgt = new CPPPPChannelManagement();
     //_cameraservice.m_PPPPChannelMgt->pCameraViewController = self;
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
@@ -48,10 +47,10 @@
 
 -(void)viewDidAppear:(BOOL)animated
 {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.text_cameraID.text = [defaults objectForKey:CAM_ID];
-    self.text_user.text = [defaults objectForKey:CAM_USER];
-    self.text_pwd.text = [defaults objectForKey:CAM_PWD];
+    [_cameraservice stop];
+    self.text_cameraID.text = [_cameraservice cameraId];
+    self.text_user.text = [_cameraservice user];
+    self.text_pwd.text = [_cameraservice pwd];
 }
 
 
@@ -66,6 +65,11 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    id dest = [segue destinationViewController];
+    if([segue.identifier isEqualToString:@"camera_to_room"])
+    {
+        [dest setValue:_cameraservice.roomId forKey:@"roomId"];
+    }
 }
 
 - (void)ConnectCam{
@@ -73,9 +77,9 @@
     _user = self.text_user.text;
     _pwd = self.text_pwd.text;
     
-    _cameraservice.cameraId = _cameraID;
-    _cameraservice.user = _user;
-    _cameraservice.pwd = _pwd;
+    [_cameraservice setCameraId:_cameraID];
+    [_cameraservice setUser:_user];
+    [_cameraservice setPwd:_pwd];
     
     
     [self performSelectorOnMainThread:@selector(jump2play) withObject:nil waitUntilDone:NO];
@@ -86,15 +90,7 @@
 }
 
 - (IBAction)btn_back_onClick:(id)sender {
-    [_m_PPPPChannelMgtCondition lock];
-    if (_m_PPPPChannelMgt == NULL) {
-        [_m_PPPPChannelMgtCondition unlock];
-        [self dismissModalViewControllerAnimated:YES];
-        return;
-    }
-    _m_PPPPChannelMgt->StopAll();
-    [_m_PPPPChannelMgtCondition unlock];
-    [self dismissModalViewControllerAnimated:YES];
+    [self performSegueWithIdentifier:@"camera_to_room" sender:self];
 }
 
 #if 0
@@ -172,28 +168,12 @@
 
 - (void)handleTimer:(NSTimer *)timer{
     [self stopSearch];
-}
-
-- (void) stopSearch
-{
-    if(_progress)
-    {
-        [_progress removeFromSuperview];
-        // [_progress release];
-        _progress = nil;
-    }
-    
-    if (dvs != NULL) {
-        SAFE_DELETE(dvs);
-    }
-
     if([deviceList count] == 0)
     {
         UIAlertView *alertview = [[UIAlertView alloc] initWithTitle:@"警告" message:@"没有找到设备!" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
         [alertview show];
         return;
     }
-    
     // show choose menu
     NSMutableArray *devName = [[NSMutableArray alloc] init];
     NSMutableArray *devDid = [[NSMutableArray alloc] init];
@@ -210,6 +190,20 @@
         self.text_cameraID.text = _cameraID;
         self.text_user.text = _user;
     }];
+}
+
+- (void) stopSearch
+{
+    if(_progress)
+    {
+        [_progress removeFromSuperview];
+        // [_progress release];
+        _progress = nil;
+    }
+    
+    if (dvs != NULL) {
+        SAFE_DELETE(dvs);
+    }
 }
 
 

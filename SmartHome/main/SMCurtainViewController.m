@@ -106,7 +106,7 @@
         [bean setFurnitureId:[furniture getId]];
         [bean setTag:[furniture getTag]];
         [bean setWidgetid:buttonId];
-        downcode = [widgetdao getValidMaxdowncode] + 1;
+        downcode = [widgetdao getMaxDownCode] + 1;
         [bean setDowncode:downcode];
         [widgetdao add:bean];
     }
@@ -121,37 +121,26 @@
 
 -(void)sendAndRecvThread:(NSNumber*)down
 {
-    int count = 0;
     NSString *curtcode = [down stringValue];
     SocketMessage *mySocketMessage = [SocketMessage getInstance];
     [mySocketMessage sendCurtCode:curtcode];
     while(!onSucceedListener.dataReceived)
     {
-        if(count == 3 || onSucceedListener.dataReceived)
-        {
-            //连接超时
-            break;
-        }
-        else
-        {
-            count++;
-            
-            [NSThread sleepForTimeInterval:2];
-        }
+        [NSThread sleepForTimeInterval:1.0];
     }
-    onSucceedListener.dataReceived = NO;
     
     if([onSucceedListener.socketResult isEqualToString:@"success"])
     {
         NSLog(@"连接成功");
-        [[UDPSocketTask getInstance] removeSucceedMessageListener];
+        //[[UDPSocketTask getInstance] removeSucceedMessageListener];
     }
     else
     {
         //socketResult = [socketResult initWithFormat:@""] ;
         NSLog(@"连接超时");
     }
-    onSucceedListener.socketResult = nil ;
+    onSucceedListener.socketResult = @"" ;
+    onSucceedListener.dataReceived = NO;
     [NSThread exit];
 }
 

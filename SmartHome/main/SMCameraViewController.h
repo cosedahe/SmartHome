@@ -25,8 +25,6 @@
 }
 @property MBProgressHUD *progress;
 
-@property (nonatomic, retain) NSCondition* m_PPPPChannelMgtCondition;
-@property CPPPPChannelManagement *m_PPPPChannelMgt;
 @property CameraService *cameraservice;
 @property (nonatomic, retain) IBOutlet UIImageView* playView;
 @property (weak, nonatomic) IBOutlet UIView *view1;

@@ -43,16 +43,6 @@ static const int DOWNCODEINT = 0x03;
 {
     NSMutableArray *widgetlist= [[NSMutableArray alloc] init];
     long maxdowncode = [widgetdao getMaxDownCode];
-    // there is no downcode in database if it is first loaded
-    if(maxdowncode == 0)
-    {
-#warning TODO: modify maxdowncode
-        maxdowncode = 4000;
-        /*maxdowncode = [self getMaxdowncode];
-        while(maxdowncode < 1 || maxdowncode > 6*10000)
-            maxdowncode = [self getMaxdowncode];
-         */
-    }
     
     for(int i = 0; i < [buttonlist count]; i++)
     {
@@ -76,29 +66,4 @@ static const int DOWNCODEINT = 0x03;
     
     return widgetlist;
 }
-
--(long)getMaxdowncode
-{
-    
-    long maxdowncode = [widgetdao getMaxDownCode];
-    // there is no downcode in database if it is first loaded
-    if(maxdowncode == 0)
-    {
-#warning TODO: modify maxdowncode
-        maxdowncode = 4000;
-    }
-
-    return maxdowncode;
-    /*
-    double UnixTime = [[NSDate date] timeIntervalSince1970] * 1000;
-    
-    // unsigned long long UnixTime = time(NULL);
-    long maxdowncode = (unsigned long long)UnixTime % 300001;
-    //if(maxdowncode >=1 && maxdowncode <=6 * 10000)
-        return maxdowncode;
-    //else
-    //    return [self getMaxdowncode];
-     */
-}
-
 @end

@@ -42,5 +42,6 @@
 - (IBAction)btn_off_onClick:(id)sender;
 - (IBAction)btn_add_onClick:(id)sender;
 - (IBAction)btn_back_onClick:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *btn_learn;
 -(void)sendAndRecvThread:(NSNumber*)down;
 @end

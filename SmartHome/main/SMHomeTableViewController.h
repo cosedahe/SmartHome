@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "SMRoomViewCell.h"
 #import "BaseViewController.h"
+#import "FurnitureDao.h"
 
 @interface SMHomeTableViewController : BaseViewController<UITableViewDelegate, UITableViewDataSource>
 

@@ -21,7 +21,7 @@
 
 -(void)viewDidAppear:(BOOL)animated
 {
-    if([_cameraservice.cameraId isEqualToString:@""] || [_cameraservice.user isEqualToString:@""] || [_cameraservice.pwd isEqualToString:@""])
+    if([[_cameraservice cameraId] isEqualToString:@""] || [[_cameraservice user] isEqualToString:@""] || [[_cameraservice pwd] isEqualToString:@""])
     {
         [_cameraservice.m_PPPPChannelMgtCondition lock];
         if (_cameraservice.m_PPPPChannelMgt == NULL) {
@@ -45,6 +45,13 @@
 #endif
     
     // Do any additional setup after loading the view.
+    _alertView = [[UIAlertView alloc]
+                              initWithTitle:@"警告"
+                              message:@""
+                              delegate:self
+                              cancelButtonTitle:@"确定"
+                              otherButtonTitles:nil];
+    _playView.contentMode = UIViewContentModeScaleAspectFit;
 }
 
 -(void)startPlay
@@ -56,9 +63,31 @@
     [self.view bringSubviewToFront:_progress];
     _progress.removeFromSuperViewOnHide = YES;
     [_progress show:YES];
+    [self performSelectorOnMainThread:@selector(performTimer) withObject:nil waitUntilDone:NO];
     
     [_cameraservice Initialize];
     [self performSelector:@selector(ConnectCam) withObject:nil];
+}
+
+-(void)performTimer
+{
+    _processTimer = [NSTimer scheduledTimerWithTimeInterval:20.0 target:self selector:@selector(handleTimeOut:) userInfo:nil repeats:NO];
+}
+
+-(void)handleTimeOut:(NSTimer *)paramTimer
+{
+    if(_progress)
+    {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
+        [_progress removeFromSuperview];
+        // [_progress release];
+        _progress = nil;
+    }
+    [self stopPlay];
+    
+    _alertView.title = @"连接超时";
+    _alertView.delegate = self;
+    [_alertView show];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -95,15 +124,20 @@
     [_cameraservice.m_PPPPChannelMgtCondition unlock];
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    if([segue.identifier isEqualToString:@"cameraplay_to_room"])
+    {
+        id dest = [segue destinationViewController];
+        [dest setValue:_cameraservice.roomId forKey:@"roomId"];
+    }
 }
-*/
+
 
 //ImageNotifyProtocol
 - (void) ImageNotify: (UIImage *)image timestamp: (NSInteger)timestamp DID:(NSString *)did{
@@ -114,9 +148,25 @@
         // [_progress release];
         _progress = nil;
     }
+    if(_processTimer != nil)
+    {
+        [_processTimer invalidate];
+    }
     [self performSelector:@selector(refreshImage:) withObject:image];
 }
 - (void) YUVNotify: (Byte*) yuv length:(int)length width: (int) width height:(int)height timestamp:(unsigned int)timestamp DID:(NSString *)did{
+    if(_progress)
+    {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
+        [_progress removeFromSuperview];
+        // [_progress release];
+        _progress = nil;
+    }
+    if(_processTimer != nil)
+    {
+        [_processTimer invalidate];
+    }
+    
     UIImage* image = [APICommon YUV420ToImage:yuv width:width height:height];
     [self performSelector:@selector(refreshImage:) withObject:image];
 }
@@ -127,8 +177,10 @@
 - (void) refreshImage:(UIImage* ) image{
     if (image != nil) {
         dispatch_async(dispatch_get_main_queue(),^{
-            _playView.image = image;
-        });
+            NSLog(@"height = %f, width = %f.", image.size.height, image.size.width);
+                       _playView.image = image;
+            _playView.bounds = CGRectMake(0, 0, image.size.height, image.size.width);
+                       });
     }
 }
 
@@ -182,13 +234,6 @@
 - (void) PPPPStatus: (NSString*) strDID statusType:(NSInteger) statusType status:(NSInteger) status{
     NSString* strPPPPStatus;
     
-    UIAlertView *alertView = [[UIAlertView alloc]
-                              initWithTitle:@"警告"
-                              message:@""
-                              delegate:self
-                              cancelButtonTitle:@"确定"
-                              otherButtonTitles:nil];
-    
     switch (status) {
         case PPPP_STATUS_CONNECTING:
             strPPPPStatus = NSLocalizedStringFromTable(@"PPPPStatusConnecting", @STR_LOCALIZED_FILE_NAME, nil);
@@ -201,58 +246,78 @@
             strPPPPStatus = NSLocalizedStringFromTable(@"PPPPStatusOnline", @STR_LOCALIZED_FILE_NAME, nil);
             // store cameraid user & pwd
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            [defaults setObject:_cameraservice.cameraId forKey:CAM_ID];
-            [defaults setObject:_cameraservice.user forKey:CAM_USER];
-            [defaults setObject:_cameraservice.pwd forKey:CAM_PWD];
-            [defaults synchronize];
         }
             break;
         case PPPP_STATUS_DISCONNECT:
             strPPPPStatus = NSLocalizedStringFromTable(@"PPPPStatusDisconnected", @STR_LOCALIZED_FILE_NAME, nil);
-            alertView.message = @"相机已断断线";
-            [alertView show];
+            [self performSelectorOnMainThread:@selector(showAlertMessage:) withObject:[NSNumber numberWithInt:status]waitUntilDone:NO];
             break;
         case PPPP_STATUS_INVALID_ID:
             strPPPPStatus = NSLocalizedStringFromTable(@"PPPPStatusInvalidID", @STR_LOCALIZED_FILE_NAME, nil);
-            if(_progress)
-            {
-                [_progress removeFromSuperview];
-                // [_progress release];
-                _progress = nil;
-            }
-            alertView.message = @"摄像头ID不正确！";
-            [alertView show];
+            [self performSelectorOnMainThread:@selector(showAlertMessage:) withObject:[NSNumber numberWithInt:status]waitUntilDone:NO];
             break;
         case PPPP_STATUS_UNKNOWN:
         case PPPP_STATUS_CONNECT_FAILED:
         case PPPP_STATUS_DEVICE_NOT_ON_LINE:
         case PPPP_STATUS_CONNECT_TIMEOUT:
-            if(_progress)
-            {
-                [_progress removeFromSuperview];
-                // [_progress release];
-                _progress = nil;
-            }
-            alertView.message = @"连接失败";
-            [alertView show];
+            [self performSelectorOnMainThread:@selector(showAlertMessage:) withObject:[NSNumber numberWithInt:status]waitUntilDone:NO];
             break;
         case PPPP_STATUS_INVALID_USER_PWD:
+        {
             strPPPPStatus = NSLocalizedStringFromTable(@"PPPPStatusInvaliduserpwd", @STR_LOCALIZED_FILE_NAME, nil);
-            if(_progress)
-            {
-                [_progress removeFromSuperview];
-                //[_progress release];
-                _progress = nil;
-                [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
-            }
-            alertView.message = @"用户名密码不正确！";
-            [alertView show];
+            [self performSelectorOnMainThread:@selector(showAlertMessage:) withObject:[NSNumber numberWithInt:status]waitUntilDone:NO];
+        }
             break;
         default:
             strPPPPStatus = NSLocalizedStringFromTable(@"PPPPStatusUnknown", @STR_LOCALIZED_FILE_NAME, nil);
             break;
     }
     NSLog(@"PPPPStatus  %d",status);
+}
+
+-(void)showAlertMessage:(NSNumber *)msgType
+{
+    if(_processTimer != nil)
+    {
+        [_processTimer invalidate];
+    }
+    if(_progress)
+    {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
+        [_progress removeFromSuperview];
+        // [_progress release];
+        _progress = nil;
+    }
+    
+    _alertView.title = @"连接失败";
+    switch([msgType intValue])
+    {
+        case PPPP_STATUS_DISCONNECT:
+            _alertView.message = @"相机已断断线";
+            break;
+        case PPPP_STATUS_INVALID_ID:
+            _alertView.message = @"摄像头ID不正确！";
+            break;
+        case PPPP_STATUS_CONNECT_TIMEOUT:
+            _alertView.message = @"连接超时！";
+            break;
+        case PPPP_STATUS_INVALID_USER_PWD:
+            _alertView.message =  @"用户名密码不正确！";
+            _cameraservice.pwd = @"";
+            break;
+        case PPPP_STATUS_DEVICE_NOT_ON_LINE:
+            _alertView.message = @"摄像机不在线";
+            break;
+        default:
+            _alertView.message = @"未知原因";
+            break;
+    }
+
+    [_alertView show];
+    
+#warning should return camera view
+    [self stopPlay];
+    //[self dismissModalViewControllerAnimated:YES];
 }
 
 -(void)hudWasHidden:(MBProgressHUD *)hud
@@ -263,28 +328,40 @@
     hud = nil;
 }
 
-- (IBAction)btn_up_onClick:(id)sender {
-    /*摄像机需在线状态*/
-    _cameraservice.m_PPPPChannelMgt->PTZ_Control([_cameraservice.cameraId UTF8String], CMD_PTZ_UP);
-    _cameraservice.m_PPPPChannelMgt->PTZ_Control([_cameraservice.cameraId UTF8String], CMD_PTZ_UP_STOP);
+- (IBAction)btn_up_touchDown:(id)sender {
+    _cameraservice.m_PPPPChannelMgt->PTZ_Control([[_cameraservice cameraId] UTF8String], CMD_PTZ_UP);
 }
 
-- (IBAction)btn_down_onClick:(id)sender {
-    /*摄像机需在线状态*/
-    _cameraservice.m_PPPPChannelMgt->PTZ_Control([_cameraservice.cameraId UTF8String], CMD_PTZ_DOWN);
-    _cameraservice.m_PPPPChannelMgt->PTZ_Control([_cameraservice.cameraId UTF8String], CMD_PTZ_DOWN_STOP);
+- (IBAction)btn_left_touchDown:(id)sender {
+    _cameraservice.m_PPPPChannelMgt->PTZ_Control([[_cameraservice cameraId] UTF8String], CMD_PTZ_LEFT);
 }
 
-- (IBAction)btn_left_onClick:(id)sender {
-    /*摄像机需在线状态*/
-    _cameraservice.m_PPPPChannelMgt->PTZ_Control([_cameraservice.cameraId UTF8String], CMD_PTZ_LEFT);
-    _cameraservice.m_PPPPChannelMgt->PTZ_Control([_cameraservice.cameraId UTF8String], CMD_PTZ_LEFT_STOP);
+- (IBAction)btn_right_touchDown:(id)sender {
+    _cameraservice.m_PPPPChannelMgt->PTZ_Control([[_cameraservice cameraId] UTF8String], CMD_PTZ_RIGHT);
 }
 
-- (IBAction)btn_right_onClcik:(id)sender {
+- (IBAction)btn_down_touchDown:(id)sender {
+    _cameraservice.m_PPPPChannelMgt->PTZ_Control([[_cameraservice cameraId] UTF8String], CMD_PTZ_DOWN);
+}
+
+- (IBAction)btn_up_upInside:(id)sender {
     /*摄像机需在线状态*/
-    _cameraservice.m_PPPPChannelMgt->PTZ_Control([_cameraservice.cameraId UTF8String], CMD_PTZ_RIGHT);
-    _cameraservice.m_PPPPChannelMgt->PTZ_Control([_cameraservice.cameraId UTF8String], CMD_PTZ_RIGHT_STOP);
+    _cameraservice.m_PPPPChannelMgt->PTZ_Control([[_cameraservice cameraId] UTF8String], CMD_PTZ_UP_STOP);
+}
+
+- (IBAction)btn_down_upInside:(id)sender {
+    /*摄像机需在线状态*/
+    _cameraservice.m_PPPPChannelMgt->PTZ_Control([[_cameraservice cameraId] UTF8String], CMD_PTZ_DOWN_STOP);
+}
+
+- (IBAction)btn_left_upInside:(id)sender {
+    /*摄像机需在线状态*/
+    _cameraservice.m_PPPPChannelMgt->PTZ_Control([[_cameraservice cameraId] UTF8String], CMD_PTZ_LEFT_STOP);
+}
+
+- (IBAction)btn_right_upInside:(id)sender {
+    /*摄像机需在线状态*/
+    _cameraservice.m_PPPPChannelMgt->PTZ_Control([[_cameraservice cameraId] UTF8String], CMD_PTZ_RIGHT_STOP);
 }
 
 - (IBAction)btn_menu_onClick:(id)sender {
@@ -302,7 +379,8 @@
         //[self performSegueWithIdentifier:@"cameraplay_to_room" sender:self];
     {
         [self stopPlay];
-        [self dismissModalViewControllerAnimated:YES];
+        //[self dismissModalViewControllerAnimated:YES];
+        [self performSegueWithIdentifier:@"cameraplay_to_room" sender:self];
     }
 }
 

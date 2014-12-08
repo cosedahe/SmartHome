@@ -24,12 +24,15 @@
 @private FurnitureDao *furnituredao;
 @private SocketMessage *socketmessage;
 @private FurnitureBean *furniture;  // send to child view
+@private CameraService *cameraservice;
+@private OnIfSucceedMessageListener *onIfSucceedListener;
 }
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 - (IBAction)btn_add_onClick:(id)sender;
 - (IBAction)btn_back_onclick:(id)sender;
 - (IBAction)btn_connect_to_host_onClick:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *btn_connect_host;
 
 @property(nonatomic,weak)NSString *roomId;
 

@@ -24,6 +24,7 @@
     ip = @"121.42.49.128";
     //ip = @"58.215.235.62";
     port = 8000;
+    isCommandProcessed = YES;
     
     return self;
 }
@@ -222,16 +223,19 @@ struct sockaddr_in destination;
 struct timeval tv_out;
 fd_set readfds, writefds;
 int count = 0;
--(BOOL) sendAndReceive:(NSString*) msg ipAddress:(NSString*) ip port:(int) p
+
+-(BOOL) sendAndReceive:(NSString*) msg ipAddress:(NSString*) myIp port:(int) p
 {
+    isCommandProcessed = NO;
 	int sock;
 	unsigned long echolen;
     
     NSLog(@"Sending message: %@", msg);
     
-	if (msg == nil || ip == nil)
+	if (msg == nil || myIp == nil)
 	{
 		printf("Message and/or ip address is null\n");
+        isCommandProcessed = YES;
 		return false;
 	}
     
@@ -239,6 +243,7 @@ int count = 0;
 	if ((sock = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP)) < 0)
 	{
  		printf("Failed to create socket\n");
+        isCommandProcessed = YES;
         return false;
 	}
     
@@ -282,6 +287,8 @@ int count = 0;
                            sizeof(destination)) != echolen)
                 {
                     printf("Mismatch in number of sent bytes, errno = %d\n", errno);
+                    count = 0;
+                    isCommandProcessed = YES;
                     return false;
                 }
                 else
@@ -290,6 +297,8 @@ int count = 0;
                     BOOL ret = [self receiveThread];
                     if(ret)
                     {
+                        count = 0;
+                        isCommandProcessed = YES;
                         return true;
                     }
                     else if(count < 3)
@@ -306,6 +315,7 @@ int count = 0;
     }
     
     count = 0;
+    isCommandProcessed = YES;
     return false;
 }
 
@@ -330,13 +340,18 @@ int count = 0;
     /* use select instead */
     FD_ZERO(&readfds);
     FD_SET(socketId, &readfds);
+    // set send and receive timeout
+    tv_out.tv_sec = 2;
+    tv_out.tv_usec = 0;
+    int retVal = 0;
     @try
     {
-        if(select(socketId+1, &readfds, NULL, NULL, &tv_out) > 0)
+        retVal = select(socketId+1, &readfds, NULL, NULL, &tv_out);
+        NSLog(@"retVal = %d", retVal);
+        if(retVal >= 0)
         {
             if(FD_ISSET(socketId, &readfds) > 0)
             {
-
                 int len = recvfrom(socketId, buffer, sizeof(buffer), 0, (struct sockaddr*)&destination, (socklen_t *)&addr_len);
                 if(len<0)
                     printf("####%d\n", errno);
@@ -373,9 +388,8 @@ int count = 0;
         NSLog(@"%@", e);
     }
     
-    if(result)
+    if(![result isEqualToString:@""])
     {
-        count = 0;
         [self getSocketMessage:result];
     }
     else if(count >= 3)

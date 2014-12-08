@@ -81,7 +81,27 @@ static NSString *roomId;
     RoomBean *room = [self.listItems objectAtIndex:row];
     cell.lab_roomName.text = [room getName];
     cell.lab_roomNickName.text = [room getDescription];
-    // cell.lab_devices.text = [room getFurniturelist];
+    FurnitureDao *furnituredao = [[FurnitureDao alloc] init];
+    NSMutableArray *furnitureList = [furnituredao getListByFatherId:[room getId]];
+    if([furnitureList count] != 0)
+    {
+        NSMutableString *devices = [[NSMutableString alloc] initWithString:@""];
+        for (FurnitureBean *bean in furnitureList)
+        {
+            [devices appendString:[bean getName]];
+            [devices appendString:@" "];
+        }
+        //cell.lab_devices.lineBreakMode = NSLineBreakByWordWrapping;
+        //cell.lab_devices.numberOfLines = 0;
+        CGSize size = CGSizeMake(320, 200);
+        CGSize size01 = [devices sizeWithFont:[UIFont systemFontOfSize:12.0f] constrainedToSize: size lineBreakMode:NSLineBreakByWordWrapping];
+        [cell.lab_devices setFrame:CGRectMake(10, 50, size01.width, size01.height)];
+        cell.lab_devices.text = devices;
+    }
+    else
+    {
+        cell.lab_devices.text = @"无设备";
+    }
     // cell.imageView.image = [UIImage imageNamed:[room getImagePath]];
     
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -154,6 +174,43 @@ static NSString *roomId;
 - (IBAction)btn_relog_onclick:(id)sender {
     //[self dismissModalViewControllerAnimated:YES];
     [self performSegueWithIdentifier:@"home_to_menu" sender:self];
+}
+
+-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
+-(NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return @"删除";
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // delete elemenet
+#warning delete element
+        /*WidgetDao *dao = [[WidgetDao alloc] init];
+        FurnitureBean *bean = [furniturelist objectAtIndex:[indexPath row]];
+        [furniturelist removeObjectAtIndex:[indexPath row]];
+        [dao deleteByFatherId:[bean getId]];
+        [furnituredao deleteObj:bean];
+        //[tableView reloadData];
+        //[self.tableView reloadData];
+         */
+        RoomDao *dao = [[RoomDao alloc] init];
+        RoomBean *bean = [self.listItems objectAtIndex:indexPath.row];
+        FurnitureDao *furnituredao = [[FurnitureDao alloc] init];
+        [furnituredao deleteByFatherId:[bean getId]];
+        [dao deleteObj:bean];
+        [self.listItems removeObject:bean];
+        [self performSelectorOnMainThread:@selector(finishReloadingData) withObject:nil waitUntilDone:NO];
+    }
+}
+
+-(void)finishReloadingData
+{
+    [self.tableView reloadData];
 }
 
 @end

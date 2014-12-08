@@ -50,10 +50,6 @@
     {
 #warning why getMaxDownCode always crash
         long maxdowncode = [widgetdao getMaxDownCode];
-        if(maxdowncode == 0)
-        {
-            maxdowncode = 5000; //getMaxDownCode
-        }
         [bean setDowncode:(maxdowncode + 1)];
         return [airdao add:bean];
     }
@@ -61,18 +57,6 @@
     {
         return -1;
     }
-}
-
--(long)getMaxdowncode
-{
-    double UnixTime = [[NSDate date] timeIntervalSince1970] * 1000;
-    
-    // unsigned long long UnixTime = time(NULL);
-    long maxdowncode = (unsigned long long)UnixTime % 300001;
-    //if(maxdowncode >=1 && maxdowncode <=6 * 10000)
-    return maxdowncode;
-    //else
-    //    return [self getMaxdowncode];
 }
 
 -(long)getDownCodeById:(long)downcode

@@ -24,11 +24,17 @@
 @property (weak, nonatomic) IBOutlet UIImageView *playView;
 @property CameraService *cameraservice;
 @property MBProgressHUD *progress;
+@property NSTimer *processTimer;
+@property UIAlertView *alertView;
 
-- (IBAction)btn_up_onClick:(id)sender;
-- (IBAction)btn_down_onClick:(id)sender;
-- (IBAction)btn_left_onClick:(id)sender;
-- (IBAction)btn_right_onClcik:(id)sender;
+- (IBAction)btn_up_touchDown:(id)sender;
+- (IBAction)btn_left_touchDown:(id)sender;
+- (IBAction)btn_right_touchDown:(id)sender;
+- (IBAction)btn_down_touchDown:(id)sender;
+- (IBAction)btn_up_upInside:(id)sender;
+- (IBAction)btn_down_upInside:(id)sender;
+- (IBAction)btn_left_upInside:(id)sender;
+- (IBAction)btn_right_upInside:(id)sender;
 - (IBAction)btn_menu_onClick:(id)sender;
 - (IBAction)btn_close_onClick:(id)sender;
 @end

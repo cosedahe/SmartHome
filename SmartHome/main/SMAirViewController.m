@@ -111,7 +111,10 @@
 
 
 - (IBAction)btn_learn_onClick:(id)sender {
+    onSucceedListener = [[OnIfSucceedMessageListener alloc] init];
+    [[UDPSocketTask getInstance] setSucceedMessageListener:onSucceedListener];
     [socketmessage sendIRCode:0];
+    //[NSThread detachNewThreadSelector:@selector(sendAndRecvThread:) toTarget:self withObject:[NSNumber numberWithLong:downcode]];
 }
 
 - (IBAction)btn_off_onClick:(id)sender {
@@ -127,10 +130,6 @@
         WidgetBean *bean = [[WidgetBean alloc] init];
         [bean setFurnitureId:[furniture getId]];
         long maxdowncode = [widgetdao getMaxDownCode];
-        if(maxdowncode == 0)
-        {
-            maxdowncode = 4000; //getMaxDownCode
-        }
         downcode = maxdowncode + 1;
         [bean setDowncode:downcode];
         [bean setTag:@"aircondition"];
@@ -150,7 +149,6 @@
 
 -(void)sendAndRecvThread:(NSNumber*)down
 {
-    int count = 0;
     long downcode = [down longValue];
     SocketMessage *mySocketMessage = [SocketMessage getInstance];
     [mySocketMessage sendDownCode:downcode];
@@ -158,20 +156,27 @@
     {
         [NSThread sleepForTimeInterval:1];
     }
-    onSucceedListener.dataReceived = NO;
     
     if([onSucceedListener.socketResult isEqualToString:@"success"])
     {
         NSLog(@"连接成功");
         [[UDPSocketTask getInstance] removeSucceedMessageListener];
+        [self performSelectorOnMainThread:@selector(updateLearnLabel) withObject:nil waitUntilDone:NO];
     }
     else
     {
         //socketResult = [socketResult initWithFormat:@""] ;
         NSLog(@"连接超时");
     }
-    onSucceedListener.socketResult = nil ;
+    onSucceedListener.socketResult = @"" ;
+    onSucceedListener.dataReceived = NO;
     [NSThread exit];
+}
+
+-(void)updateLearnLabel
+{
+    if(YES)
+        self.btn_learn.titleLabel.text = @"学习成功";
 }
 
 - (IBAction)btn_add_onClick:(id)sender {

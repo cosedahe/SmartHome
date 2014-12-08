@@ -132,12 +132,13 @@ static int btnId = -1;
     
     [widgetservice sendDowncode:[buttonlist indexOfObject:[NSNumber numberWithInt:btnId]] :widgetlist];
     
-    onSucceedListener.dataReceived = false;
-    // success? fail?
+    while(!onSucceedListener.dataReceived)
+    {
+        [NSThread sleepForTimeInterval:0.5];
+    }
+
     if([onSucceedListener.socketResult isEqualToString:@"success"])
     {
-        onSucceedListener.socketResult = @"fail" ;
-        
         NSLog(@"连接成功");
         [[UDPSocketTask getInstance] removeSucceedMessageListener];
     }
@@ -146,6 +147,8 @@ static int btnId = -1;
         //socketResult = [socketResult initWithFormat:@""] ;
         NSLog(@"连接超时");
     }
+    onSucceedListener.dataReceived = NO;
+    onSucceedListener.socketResult = @"";
     [NSThread exit];
 }
 @end

@@ -20,14 +20,17 @@
 
 @interface CameraService : NSObject
 
+
 @property (nonatomic, retain) NSCondition* m_PPPPChannelMgtCondition;
 @property CPPPPChannelManagement *m_PPPPChannelMgt;
-@property NSString *cameraId;
-@property NSString *user;
-@property NSString *pwd;
-@property int roomId;
+@property (nonatomic)  NSString *cameraId;
+@property (nonatomic)  NSString *user;
+@property (nonatomic)  NSString *pwd;
+@property (nonatomic)  NSString *roomId;
+@property (nonatomic)  NSUserDefaults *defaults;
 
 +(id)getInstance;
 -(void)Initialize;
+-(void)stop;
 
 @end

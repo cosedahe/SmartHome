@@ -20,6 +20,13 @@
     [self.label_camera1 setHidden:YES];
     [self.text_newPwd setHidden:YES];
     _cameraservice = [CameraService getInstance];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
+                                   initWithTarget:self
+                                   action:@selector(dismissKeyboard)];
+    [self.view addGestureRecognizer:tap];
+    // very important make delegate useful
+    tap.delegate = self;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -49,7 +56,7 @@
         NSLog(@"密码为空");
         return;
     }
-    _cameraservice.m_PPPPChannelMgt->SetUserPwd((char *)[_cameraservice.cameraId UTF8String], "\0", "\0", "\0", "\0", (char *)[_cameraservice.user UTF8String], (char *)[self.text_newPwd.text UTF8String]);
+    _cameraservice.m_PPPPChannelMgt->SetUserPwd((char *)[_cameraservice.cameraId UTF8String], "", "", "", "", (char *)[_cameraservice.user UTF8String], (char *)[self.text_newPwd.text UTF8String]);
 }
 
 - (IBAction)btn_modifyCamPwd_onClick:(id)sender {
@@ -65,11 +72,9 @@
     }
     _cameraservice.m_PPPPChannelMgt->StopAll();
     [_cameraservice.m_PPPPChannelMgtCondition unlock];
-    _cameraservice.pwd = @"";
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:_cameraservice.pwd forKey:CAM_PWD];
+    [_cameraservice setPwd:@""];
     
-    [self dismissModalViewControllerAnimated:NO];
+    [self performSegueWithIdentifier:@"camerasettings_to_camera" sender:self];
 }
 
 -(void)UserPwdResult:(NSString *)did user1:(NSString *)strUser1 pwd1:(NSString *)strPwd1 user2:(NSString *)strUser2 pwd2:(NSString *)strPwd2 user3:(NSString *)strUser3 pwd3:(NSString *)strPwd3
@@ -77,7 +82,21 @@
     if([strUser3 isEqualToString:_cameraservice.user] && ![strPwd3 isEqualToString:_cameraservice.pwd])
     {
         NSLog(@"修改密码成功");
+        [_cameraservice setPwd:strPwd3];
     }
+}
+
+#pragma mark - UITextField Delegate Method
+- (BOOL) textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
+
+// tap dismiss keyboard
+-(void)dismissKeyboard {
+    [self.view endEditing:YES];
+    [self.text_newPwd resignFirstResponder];
 }
 
 @end

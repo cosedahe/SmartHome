@@ -236,6 +236,9 @@ static SocketMessage *socketMessage;
         alertView.message = @"登陆失败";
         [alertView show];
     }
+    
+    onSucceedListener.socketResult = @"";
+    onSucceedListener.dataReceived = NO;
 }
 
 - (IBAction)btn_back_onClick:(id)sender {

@@ -20,6 +20,5 @@
 
 -(void)sendDowncode:(int)index :(NSMutableArray *)widgetlist;
 -(NSMutableArray *)addWidget:(FurnitureBean *)furniture :(NSMutableArray *)buttonlist;
--(long)getMaxdowncode;
 
 @end

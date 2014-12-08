@@ -122,6 +122,9 @@
     }
     
     [self closeDB];
+    
+    if(maxDowncode == 0)
+        maxDowncode = [self getValidMaxdowncode];
     return maxDowncode;
 }
 
@@ -275,25 +278,17 @@
 -(long)getValidMaxdowncode
 {
     
-    long maxdowncode = [self getMaxDownCode];
-    // there is no downcode in database if it is first loaded
-    if(maxdowncode == 0)
-    {
+    long maxdowncode = 0;
 #warning TODO: modify maxdowncode
-        maxdowncode = 4000;
+    double UnixTime = [[NSDate date] timeIntervalSince1970] * 1000;
+    while(maxdowncode < 1 || maxdowncode > 6 * 10000)
+    {
+        //[NSThread sleepForTimeInterval:0.1];
+        UnixTime += 1.0 * 1000;
+        //unsigned long long UnixTime = time(NULL);
+        maxdowncode = (unsigned long long)UnixTime % 300001;
     }
-    
     return maxdowncode;
-    /*
-     double UnixTime = [[NSDate date] timeIntervalSince1970] * 1000;
-     
-     // unsigned long long UnixTime = time(NULL);
-     long maxdowncode = (unsigned long long)UnixTime % 300001;
-     //if(maxdowncode >=1 && maxdowncode <=6 * 10000)
-     return maxdowncode;
-     //else
-     //    return [self getMaxdowncode];
-     */
 }
 
 @end

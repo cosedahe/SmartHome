@@ -7,6 +7,7 @@
 //
 
 #import "SMRoomViewController.h"
+#import "CameraService.h"
 
 static int newButtonNumber = 0;
 
@@ -54,8 +55,11 @@ static int newButtonNumber = 0;
     socketmessage = [SocketMessage getInstance];
     // set listener
 #warning set listener
-    [[UDPSocketTask getInstance] setSucceedMessageListener:[[OnIfSucceedMessageListener alloc] init]];
+    onIfSucceedListener = [[OnIfSucceedMessageListener alloc] init];
+    [[UDPSocketTask getInstance] setSucceedMessageListener:onIfSucceedListener];
     //[[UDPSocketTask getInstance] setReceiveMessageListerner:[[loginOnReceiverMessageListener alloc] init]];
+    cameraservice = [CameraService getInstance];
+    cameraservice.roomId = roomId;
 }
 
 - (void)didReceiveMemoryWarning
@@ -100,7 +104,7 @@ static int newButtonNumber = 0;
     else if([[bean getTag] isEqualToString:@"aircondition"])
     {
         cell.img_device.image = [UIImage imageNamed:@"icon_aircondition"];
-        [cell.button_turnoff setHidden:NO];
+        [cell.button_turnoff setHidden:YES];
         [cell.button_stop setHidden:YES];
         [cell.button_turnon setHidden:YES];
     }
@@ -114,14 +118,14 @@ static int newButtonNumber = 0;
     else if([[bean getTag] isEqualToString:@"television"])
     {
         cell.img_device.image = [UIImage imageNamed:@"icon_television"];
-        //cell.button_stop.isHidden = YES;
+        [cell.button_turnoff setHidden:YES];
         [cell.button_stop setHidden:YES];
         [cell.button_turnon setHidden:YES];
     }
     else if([[bean getTag] isEqualToString:@"camera"])
     {
         cell.img_device.image = [UIImage imageNamed:@"icon_camera"];
-        //cell.button_stop.isHidden = YES;
+        [cell.button_turnoff setHidden:YES];
         [cell.button_stop setHidden:YES];
         [cell.button_turnon setHidden:YES];
     }
@@ -206,27 +210,15 @@ static int newButtonNumber = 0;
     }
     else if([[furniture getTag] isEqualToString:@"camera"])
     {
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        NSString *cameraID = [[NSString alloc] initWithString:[defaults objectForKey:CAM_ID]];
-        NSString *user = [[NSString alloc] initWithString:[defaults objectForKey:CAM_USER]];
-        NSString *pwd = [[NSString alloc] initWithString:[defaults objectForKey:CAM_PWD]];
-        @try
-        {
-            if([cameraID isEqualToString:@""] || [user isEqualToString:@""] || [pwd isEqualToString:@""])
+#warning why service can be nil
+            if([[cameraservice cameraId] isEqualToString:@""] || [[cameraservice user] isEqualToString:@""] || [[cameraservice pwd] isEqualToString:@""] || cameraservice == nil || [cameraservice isEqual:nil] || [cameraservice.cameraId isEqual:nil] || [cameraservice.user isEqual:nil] || [cameraservice.pwd isEqual:nil])
+            {
                 [self performSegueWithIdentifier:@"room_to_camera" sender:self];
+            }
             else
             {
-                CameraService *service = [CameraService getInstance];
-                [service setCameraId:cameraID];
-                [service setUser:user];
-                [service setPwd:pwd];
                 [self performSegueWithIdentifier:@"room_to_cameraplay" sender:self];
             }
-        }
-        @catch(NSException *e)
-        {
-            NSLog(@"%@",e);
-        }
     }
 }
 
@@ -238,7 +230,7 @@ static int newButtonNumber = 0;
 {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    if(![segue.identifier isEqualToString:@"room_to_camera"] && ![segue.identifier isEqualToString:@"room_to_cameraplay"])
+    if(![segue.identifier isEqualToString:@"room_to_camera"] && ![segue.identifier isEqualToString:@"room_to_cameraplay"] && ![segue.identifier isEqualToString:@"room_to_home"])
     {
         id theSegue = segue.destinationViewController;
         [theSegue setValue:furniture forKey:@"furniture"];
@@ -363,7 +355,8 @@ static int newButtonNumber = 0;
 }
 
 - (IBAction)btn_back_onclick:(id)sender {
-    [self dismissModalViewControllerAnimated:YES];
+    //[self dismissModalViewControllerAnimated:YES];
+    [self performSegueWithIdentifier:@"room_to_home" sender:self];
 }
 
 - (IBAction)btn_connect_to_host_onClick:(id)sender {
@@ -374,7 +367,40 @@ static int newButtonNumber = 0;
 
 -(void)connecthost
 {
+    onIfSucceedListener = [[OnIfSucceedMessageListener alloc] init];
+    [[UDPSocketTask getInstance] setSucceedMessageListener:onIfSucceedListener];
     [socketmessage sendDownCode:0];
+}
+
+-(void)RecvThread:(NSNumber*)down
+{
+    while(!onIfSucceedListener.dataReceived)
+    {
+        [NSThread sleepForTimeInterval:1.0];
+    }
+    
+    if([onIfSucceedListener.socketResult isEqualToString:@"success"])
+    {
+        NSLog(@"连接成功");
+        [self performSelectorOnMainThread:@selector(updateLearnLabel) withObject:nil waitUntilDone:NO];
+    }
+    else
+    {
+        //socketResult = [socketResult initWithFormat:@""] ;
+        NSLog(@"连接超时");
+        //[self performSelectorOnMainThread:@selector(updateLearnLabel) withObject:nil waitUntilDone:NO];
+    }
+    onIfSucceedListener.socketResult = @"" ;
+    onIfSucceedListener.dataReceived = NO;
+    [NSThread exit];
+}
+
+-(void)updateLearnLabel//:(BOOL)b
+{
+    if (YES)
+        self.btn_connect_host.titleLabel.text = @"连接成功";
+    else
+        self.btn_connect_host.titleLabel.text = @"连接主机";
 }
 
 #define BUTTONTURNON    0x01

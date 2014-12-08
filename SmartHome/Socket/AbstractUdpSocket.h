@@ -20,6 +20,7 @@ static NSData *packet;*/
     OnReceiverMessageListener *msgListener;
     OnIfSucceedMessageListener *onIfSucceedMessageListener;
     NSData *packet;
+    BOOL isCommandProcessed;
     int port;
     NSString *ip;
 }

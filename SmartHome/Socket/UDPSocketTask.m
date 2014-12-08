@@ -31,6 +31,12 @@ static UDPSocketTask *repairSendSocketTask;
 
 -(void)runThread
 {
+    if(!isCommandProcessed)
+    {
+#warning show warning message to user
+        NSLog(@"Last command has not been processed, please wait;");
+        return;
+    }
     [self setUdpSocket:ip :port :[self sendMessage]];
 }
 
