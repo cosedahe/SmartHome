@@ -3011,6 +3011,7 @@
 					"$(PROJECT_DIR)/SmartHome/ThirdParty/p2pCamera/lib",
 				);
 				ONLY_ACTIVE_ARCH = NO;
+				PROVISIONING_PROFILE = "31d9c513-f864-4e1a-9e87-0299a9c521e4";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "armv7 armv7s";
 			};
@@ -3050,6 +3051,7 @@
 					"$(PROJECT_DIR)/SmartHome/ThirdParty/p2pCamera/lib",
 				);
 				ONLY_ACTIVE_ARCH = NO;
+				PROVISIONING_PROFILE = "31d9c513-f864-4e1a-9e87-0299a9c521e4";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "armv7 armv7s";
@@ -3062,6 +3064,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SmartHome/SmartHome-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -3070,7 +3073,7 @@
 					"$(PROJECT_DIR)/SmartHome/ThirdParty/p2pCamera/include",
 				);
 				INFOPLIST_FILE = "SmartHome/SmartHome-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/SmartHome/ThirdParty/p2pCamera/lib",
@@ -3078,6 +3081,7 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "31d9c513-f864-4e1a-9e87-0299a9c521e4";
 				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3089,6 +3093,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SmartHome/SmartHome-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -3097,7 +3102,7 @@
 					"$(PROJECT_DIR)/SmartHome/ThirdParty/p2pCamera/include",
 				);
 				INFOPLIST_FILE = "SmartHome/SmartHome-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/SmartHome/ThirdParty/p2pCamera/lib",
@@ -3105,6 +3110,7 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "31d9c513-f864-4e1a-9e87-0299a9c521e4";
 				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};

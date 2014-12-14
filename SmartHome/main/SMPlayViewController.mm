@@ -177,7 +177,7 @@
 - (void) refreshImage:(UIImage* ) image{
     if (image != nil) {
         dispatch_async(dispatch_get_main_queue(),^{
-            NSLog(@"height = %f, width = %f.", image.size.height, image.size.width);
+            //NSLog(@"height = %f, width = %f.", image.size.height, image.size.width);
                        _playView.image = image;
             _playView.bounds = CGRectMake(0, 0, image.size.height, image.size.width);
                        });
@@ -250,7 +250,9 @@
             break;
         case PPPP_STATUS_DISCONNECT:
             strPPPPStatus = NSLocalizedStringFromTable(@"PPPPStatusDisconnected", @STR_LOCALIZED_FILE_NAME, nil);
-            [self performSelectorOnMainThread:@selector(showAlertMessage:) withObject:[NSNumber numberWithInt:status]waitUntilDone:NO];
+            //[self performSelectorOnMainThread:@selector(showAlertMessage:) withObject:[NSNumber numberWithInt:status]waitUntilDone:NO];
+            [self stopPlay];
+            [self startPlay];
             break;
         case PPPP_STATUS_INVALID_ID:
             strPPPPStatus = NSLocalizedStringFromTable(@"PPPPStatusInvalidID", @STR_LOCALIZED_FILE_NAME, nil);
