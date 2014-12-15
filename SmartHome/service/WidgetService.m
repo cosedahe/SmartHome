@@ -2,8 +2,8 @@
 //  WidgetService.m
 //  SmartHome
 //
-//  Created by heteli on 14-11-19.
-//  Copyright (c) 2014年 www.chongchi-tech.com. All rights reserved.
+//  Created by He Teli on 14-11-19.
+//  Copyright (c) 2014年 无锡冲驰软件科技有限公司. All rights reserved.
 //
 
 #import "WidgetService.h"

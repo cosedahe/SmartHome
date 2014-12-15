@@ -2,8 +2,8 @@
 //  SMPlayViewController.h
 //  SmartHome
 //
-//  Created by Fang minghua on 14-12-3.
-//  Copyright (c) 2014年 www.chongchi-tech.com. All rights reserved.
+//  Created by He Teli on 14-12-3.
+//  Copyright (c) 2014年 无锡冲驰软件科技有限公司. All rights reserved.
 //
 
 #import "BaseViewController.h"

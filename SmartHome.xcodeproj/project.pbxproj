@@ -2381,7 +2381,7 @@
 			attributes = {
 				CLASSPREFIX = SM;
 				LastUpgradeCheck = 0510;
-				ORGANIZATIONNAME = "www.chongchi-tech.com";
+				ORGANIZATIONNAME = "无锡冲驰软件科技有限公司";
 				TargetAttributes = {
 					04C0431619AB054A00613062 = {
 						DevelopmentTeam = XVY3N8ARKZ;
