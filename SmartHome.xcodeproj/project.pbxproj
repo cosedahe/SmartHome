@@ -502,6 +502,7 @@
 		145110711A1C3CF800AC0946 /* WidgetDao.m in Sources */ = {isa = PBXBuildFile; fileRef = 145110701A1C3CF800AC0946 /* WidgetDao.m */; };
 		145110741A1C3D2300AC0946 /* WidgetBean.m in Sources */ = {isa = PBXBuildFile; fileRef = 145110731A1C3D2300AC0946 /* WidgetBean.m */; };
 		145110781A1C68A600AC0946 /* WidgetService.m in Sources */ = {isa = PBXBuildFile; fileRef = 145110771A1C68A600AC0946 /* WidgetService.m */; };
+		145BBB681A40018A004578A0 /* SMLightViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 145BBB671A40018A004578A0 /* SMLightViewController.m */; };
 		1498C9B21A1EDBED00DCA40C /* OnIfSucceedMessageListener.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498C9B11A1EDBED00DCA40C /* OnIfSucceedMessageListener.m */; };
 		14A829371A28628300127E0E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 14A829361A28628300127E0E /* libsqlite3.dylib */; };
 		14A8293A1A2BFE7600127E0E /* SMDeviceControlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14A829391A2BFE7600127E0E /* SMDeviceControlViewController.m */; };
@@ -1155,6 +1156,8 @@
 		145110731A1C3D2300AC0946 /* WidgetBean.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WidgetBean.m; path = SmartHome/pojo/WidgetBean.m; sourceTree = "<group>"; };
 		145110761A1C68A600AC0946 /* WidgetService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WidgetService.h; path = service/WidgetService.h; sourceTree = "<group>"; };
 		145110771A1C68A600AC0946 /* WidgetService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WidgetService.m; path = service/WidgetService.m; sourceTree = "<group>"; };
+		145BBB661A40018A004578A0 /* SMLightViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SMLightViewController.h; path = SmartHome/main/SMLightViewController.h; sourceTree = "<group>"; };
+		145BBB671A40018A004578A0 /* SMLightViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SMLightViewController.m; path = SmartHome/main/SMLightViewController.m; sourceTree = "<group>"; };
 		1498C9B01A1EDBED00DCA40C /* OnIfSucceedMessageListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OnIfSucceedMessageListener.h; path = SmartHome/Socket/OnIfSucceedMessageListener.h; sourceTree = "<group>"; };
 		1498C9B11A1EDBED00DCA40C /* OnIfSucceedMessageListener.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OnIfSucceedMessageListener.m; path = SmartHome/Socket/OnIfSucceedMessageListener.m; sourceTree = "<group>"; };
 		14A829361A28628300127E0E /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -1719,6 +1722,8 @@
 				14CBB4331A2F3DEA00780FB0 /* SMPlayViewController.mm */,
 				14CBB43C1A3031CE00780FB0 /* SMCameraSettingViewController.h */,
 				14CBB43F1A303C3200780FB0 /* SMCameraSettingViewController.mm */,
+				145BBB661A40018A004578A0 /* SMLightViewController.h */,
+				145BBB671A40018A004578A0 /* SMLightViewController.m */,
 			);
 			name = main;
 			path = ..;
@@ -2885,6 +2890,7 @@
 				0424FE9E19CACF06003E4B7F /* SMRegestViewController.m in Sources */,
 				14A8293A1A2BFE7600127E0E /* SMDeviceControlViewController.m in Sources */,
 				14CBB4401A303C3200780FB0 /* SMCameraSettingViewController.mm in Sources */,
+				145BBB681A40018A004578A0 /* SMLightViewController.m in Sources */,
 				143C1E6F1A086A2300910987 /* IQKeyboardManager.m in Sources */,
 				143C1EE41A0CB09200910987 /* SocketMessage.m in Sources */,
 				04C0433119AB054A00613062 /* SMViewController.m in Sources */,
@@ -3073,7 +3079,7 @@
 					"$(PROJECT_DIR)/SmartHome/ThirdParty/p2pCamera/include",
 				);
 				INFOPLIST_FILE = "SmartHome/SmartHome-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/SmartHome/ThirdParty/p2pCamera/lib",
@@ -3102,7 +3108,7 @@
 					"$(PROJECT_DIR)/SmartHome/ThirdParty/p2pCamera/include",
 				);
 				INFOPLIST_FILE = "SmartHome/SmartHome-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/SmartHome/ThirdParty/p2pCamera/lib",

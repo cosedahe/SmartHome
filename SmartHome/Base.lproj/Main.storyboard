@@ -1000,6 +1000,7 @@
                         <segue destination="sgp-bT-8i0" kind="modal" identifier="room_to_camera" id="Rfw-fF-jA5"/>
                         <segue destination="bQ9-nf-giv" kind="modal" identifier="room_to_cameraplay" id="f4a-KG-yW2"/>
                         <segue destination="saL-XA-aUy" kind="modal" identifier="room_to_home" id="7yy-oc-pqz"/>
+                        <segue destination="yZf-TH-oPV" kind="modal" identifier="room_to_light" id="hSY-Pq-2kX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gtr-uM-ApV" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1339,10 +1340,10 @@
             </objects>
             <point key="canvasLocation" x="-3736" y="-1066"/>
         </scene>
-        <!--View Controller-->
+        <!--Light View Controller-->
         <scene sceneID="ShD-gU-NTf">
             <objects>
-                <viewController id="yZf-TH-oPV" sceneMemberID="viewController">
+                <viewController id="yZf-TH-oPV" customClass="SMLightViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="rTT-d9-bWd"/>
                         <viewControllerLayoutGuide type="bottom" id="log-Od-g7n"/>
@@ -1350,9 +1351,91 @@
                     <view key="view" contentMode="scaleToFill" id="vmY-go-u35">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f4R-i1-2U3">
+                                <rect key="frame" x="0.0" y="20" width="320" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="i8n-9R-tQG"/>
+                                </constraints>
+                                <color key="barTintColor" red="0.0" green="0.35040872540000001" blue="0.72407863449999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <textAttributes key="titleTextAttributes">
+                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </textAttributes>
+                                <items>
+                                    <navigationItem title="灯" id="XdB-bO-JZN">
+                                        <barButtonItem key="leftBarButtonItem" style="plain" id="AyR-xm-UO8">
+                                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Jwt-ey-1jR">
+                                                <rect key="frame" x="-23" y="-15" width="71" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" title="返回">
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="btn_back_onClick:" destination="yZf-TH-oPV" eventType="touchUpInside" id="1x6-uB-7Ka"/>
+                                                </connections>
+                                            </button>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZR8-6n-MOD">
+                                <rect key="frame" x="16" y="64" width="288" height="484"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zCG-za-CdF">
+                                        <rect key="frame" x="171" y="376" width="74" height="85"/>
+                                        <state key="normal" image="light_turnoff.png">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="btn_turnoff_onClick:" destination="yZf-TH-oPV" eventType="touchUpInside" id="776-F2-UQk"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PWL-q8-VQC">
+                                        <rect key="frame" x="44" y="376" width="70" height="85"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="85" id="DUj-88-1Dr"/>
+                                            <constraint firstAttribute="width" constant="70" id="rMv-L3-F3c"/>
+                                        </constraints>
+                                        <state key="normal" image="light_turnon.png">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="btn_turnon_onClick:" destination="yZf-TH-oPV" eventType="touchUpInside" id="p7R-fm-vwK"/>
+                                        </connections>
+                                    </button>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="light_background.png" translatesAutoresizingMaskIntoConstraints="NO" id="S4T-Le-fu9">
+                                        <rect key="frame" x="8" y="8" width="272" height="336"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="zCG-za-CdF" secondAttribute="trailing" constant="43" id="F6H-p9-tvj"/>
+                                    <constraint firstItem="zCG-za-CdF" firstAttribute="bottom" secondItem="PWL-q8-VQC" secondAttribute="bottom" id="J7B-lI-opy"/>
+                                    <constraint firstItem="PWL-q8-VQC" firstAttribute="top" secondItem="S4T-Le-fu9" secondAttribute="bottom" constant="32" id="KbF-kr-mV4"/>
+                                    <constraint firstItem="S4T-Le-fu9" firstAttribute="top" secondItem="ZR8-6n-MOD" secondAttribute="topMargin" id="Llq-3p-ihY"/>
+                                    <constraint firstItem="S4T-Le-fu9" firstAttribute="trailing" secondItem="ZR8-6n-MOD" secondAttribute="trailingMargin" id="PSH-6a-zN4"/>
+                                    <constraint firstAttribute="bottom" secondItem="PWL-q8-VQC" secondAttribute="bottom" constant="23" id="PhU-uP-jUO"/>
+                                    <constraint firstItem="S4T-Le-fu9" firstAttribute="leading" secondItem="ZR8-6n-MOD" secondAttribute="leadingMargin" id="Wih-Cb-p56"/>
+                                    <constraint firstItem="zCG-za-CdF" firstAttribute="leading" secondItem="PWL-q8-VQC" secondAttribute="trailing" constant="57" id="ceI-Ip-YOf"/>
+                                    <constraint firstItem="zCG-za-CdF" firstAttribute="top" secondItem="PWL-q8-VQC" secondAttribute="top" id="dqC-A5-azf"/>
+                                    <constraint firstItem="PWL-q8-VQC" firstAttribute="leading" secondItem="ZR8-6n-MOD" secondAttribute="leading" constant="44" id="ymG-If-WTH"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="ZR8-6n-MOD" firstAttribute="centerX" secondItem="f4R-i1-2U3" secondAttribute="centerX" id="3Vi-vu-xNB"/>
+                            <constraint firstItem="f4R-i1-2U3" firstAttribute="top" secondItem="rTT-d9-bWd" secondAttribute="bottom" id="JJo-WQ-7eZ"/>
+                            <constraint firstItem="f4R-i1-2U3" firstAttribute="leading" secondItem="vmY-go-u35" secondAttribute="leading" id="N7o-lf-enL"/>
+                            <constraint firstAttribute="bottom" secondItem="ZR8-6n-MOD" secondAttribute="bottom" constant="20" symbolic="YES" id="aHv-vw-ltB"/>
+                            <constraint firstAttribute="trailing" secondItem="f4R-i1-2U3" secondAttribute="trailing" id="dLN-wS-u80"/>
+                            <constraint firstItem="ZR8-6n-MOD" firstAttribute="leading" secondItem="vmY-go-u35" secondAttribute="leadingMargin" id="mZv-aH-714"/>
+                            <constraint firstItem="ZR8-6n-MOD" firstAttribute="top" secondItem="f4R-i1-2U3" secondAttribute="bottom" id="n5D-mD-Hke"/>
+                        </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="FiU-eB-dIl"/>
+                    <connections>
+                        <outlet property="image_light" destination="S4T-Le-fu9" id="5EZ-e3-nnc"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sNZ-YT-uOc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1489,7 +1572,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E1b-LT-Xj6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-4536" y="-4296"/>
+            <point key="canvasLocation" x="-3924" y="-3528"/>
         </scene>
         <!--Air View Controller-->
         <scene sceneID="uqH-hm-jdt">
@@ -2108,6 +2191,9 @@
         <image name="guide2_background.png" width="626" height="632"/>
         <image name="icon_sm.png" width="72" height="72"/>
         <image name="left.png" width="96" height="96"/>
+        <image name="light_background.png" width="315" height="563"/>
+        <image name="light_turnoff.png" width="114" height="155"/>
+        <image name="light_turnon.png" width="114" height="155"/>
         <image name="pattern_add.png" width="47" height="47"/>
         <image name="pic_room.png" width="153" height="153"/>
         <image name="right.png" width="96" height="96"/>
@@ -2124,13 +2210,13 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="7yy-oc-pqz"/>
+        <segue reference="0aO-O7-a4c"/>
+        <segue reference="f4a-KG-yW2"/>
+        <segue reference="Rfw-fF-jA5"/>
         <segue reference="oI6-zV-JIF"/>
-        <segue reference="VKh-6h-pvI"/>
         <segue reference="Ml1-fw-6Wh"/>
         <segue reference="mLP-c0-w6v"/>
-        <segue reference="f4a-KG-yW2"/>
-        <segue reference="0aO-O7-a4c"/>
-        <segue reference="Rfw-fF-jA5"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
 </document>

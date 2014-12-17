@@ -16,7 +16,7 @@
 #import "CameraService.h"
 #import "MBProgressHUD.h"
 
-@interface SMPlayViewController : BaseViewController <ImageNotifyProtocol, ParamNotifyProtocol, MBProgressHUDDelegate, UIAlertViewDelegate>
+@interface SMPlayViewController : BaseViewController <ImageNotifyProtocol, ParamNotifyProtocol, MBProgressHUDDelegate, UIAlertViewDelegate, UIGestureRecognizerDelegate>
 {
     /*镜像参数*/
     int flip;

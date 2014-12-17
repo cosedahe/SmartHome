@@ -33,6 +33,15 @@
         [_cameraservice.m_PPPPChannelMgtCondition unlock];
         [self dismissModalViewControllerAnimated:NO];
     }
+    
+    /*UISwipeGestureRecognizer *recognizer;
+    
+    recognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(handleSwipeFrom:)];
+    
+    [recognizer setDirection:(UISwipeGestureRecognizerDirectionRight)];
+    
+    [self.view addGestureRecognizer:recognizer];
+     */
 }
 
 - (void)viewDidLoad {
@@ -385,5 +394,29 @@
         [self performSegueWithIdentifier:@"cameraplay_to_room" sender:self];
     }
 }
+
+/*-(void)handleSwipeFrom:(UISwipeGestureRecognizer *)recognizer{
+    NSLog(@"gesture recognizer: %d", recognizer.direction);
+    if(recognizer.direction == UISwipeGestureRecognizerDirectionRight)
+    {
+        _cameraservice.m_PPPPChannelMgt->PTZ_Control([[_cameraservice cameraId] UTF8String], CMD_PTZ_RIGHT);
+        _cameraservice.m_PPPPChannelMgt->PTZ_Control([[_cameraservice cameraId] UTF8String], CMD_PTZ_RIGHT_STOP);
+    }
+    else if (recognizer.direction == UISwipeGestureRecognizerDirectionLeft)
+    {
+        _cameraservice.m_PPPPChannelMgt->PTZ_Control([[_cameraservice cameraId] UTF8String], CMD_PTZ_LEFT);
+        _cameraservice.m_PPPPChannelMgt->PTZ_Control([[_cameraservice cameraId] UTF8String], CMD_PTZ_LEFT_STOP);
+    }
+    else if (recognizer.direction == UISwipeGestureRecognizerDirectionUp)
+    {
+        _cameraservice.m_PPPPChannelMgt->PTZ_Control([[_cameraservice cameraId] UTF8String], CMD_PTZ_UP);
+        _cameraservice.m_PPPPChannelMgt->PTZ_Control([[_cameraservice cameraId] UTF8String], CMD_PTZ_UP_STOP);
+    }
+    else if (recognizer.direction == UISwipeGestureRecognizerDirectionDown)
+    {
+        _cameraservice.m_PPPPChannelMgt->PTZ_Control([[_cameraservice cameraId] UTF8String], CMD_PTZ_DOWN);
+        _cameraservice.m_PPPPChannelMgt->PTZ_Control([[_cameraservice cameraId] UTF8String], CMD_PTZ_DOWN_STOP);
+    }
+}*/
 
 @end

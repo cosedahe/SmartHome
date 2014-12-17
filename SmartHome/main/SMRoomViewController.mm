@@ -220,6 +220,18 @@ static int newButtonNumber = 0;
                 [self performSegueWithIdentifier:@"room_to_cameraplay" sender:self];
             }
     }
+    else if([[furniture getTag] isEqualToString:@"light"])
+    {
+        @try
+        {
+            
+            [self performSegueWithIdentifier:@"room_to_light" sender:self];
+        }
+        @catch(NSException *e)
+        {
+            NSLog(@"%@",e);
+        }
+    }
 }
 
 
