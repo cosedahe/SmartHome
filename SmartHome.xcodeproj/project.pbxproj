@@ -1518,13 +1518,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		14083A7C1A247CB400CEB56E /* DropDownList */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = DropDownList;
-			sourceTree = "<group>";
-		};
 		143C1E4C19F63C5300910987 /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
@@ -1688,7 +1681,6 @@
 			children = (
 				14083A8D1A257BA700CEB56E /* SMAirViewController.m */,
 				14083A8C1A257BA700CEB56E /* SMAirViewController.h */,
-				14083A7C1A247CB400CEB56E /* DropDownList */,
 				145110641A1C27D500AC0946 /* TableCell */,
 				145110001A18F16900AC0946 /* SMDeviceManageViewController.h */,
 				145110011A18F16900AC0946 /* SMDeviceManageViewController.m */,

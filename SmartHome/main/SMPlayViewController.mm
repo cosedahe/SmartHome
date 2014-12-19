@@ -34,14 +34,22 @@
         [self dismissModalViewControllerAnimated:NO];
     }
     
-    /*UISwipeGestureRecognizer *recognizer;
-    
-    recognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(handleSwipeFrom:)];
-    
-    [recognizer setDirection:(UISwipeGestureRecognizerDirectionRight)];
-    
+    UISwipeGestureRecognizer *recognizer;
+    recognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipes:)];
+    recognizer.direction = UISwipeGestureRecognizerDirectionDown;
     [self.view addGestureRecognizer:recognizer];
-     */
+    
+    recognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipes:)];
+    recognizer.direction = UISwipeGestureRecognizerDirectionUp;
+    [self.view addGestureRecognizer:recognizer];
+    
+    recognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipes:)];
+    recognizer.direction = UISwipeGestureRecognizerDirectionRight;
+    [self.view addGestureRecognizer:recognizer];
+    
+    recognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipes:)];
+    recognizer.direction = UISwipeGestureRecognizerDirectionLeft;
+    [self.view addGestureRecognizer:recognizer];
 }
 
 - (void)viewDidLoad {
@@ -395,7 +403,7 @@
     }
 }
 
-/*-(void)handleSwipeFrom:(UISwipeGestureRecognizer *)recognizer{
+-(void)handleSwipes:(UISwipeGestureRecognizer *)recognizer{
     NSLog(@"gesture recognizer: %d", recognizer.direction);
     if(recognizer.direction == UISwipeGestureRecognizerDirectionRight)
     {
@@ -417,6 +425,6 @@
         _cameraservice.m_PPPPChannelMgt->PTZ_Control([[_cameraservice cameraId] UTF8String], CMD_PTZ_DOWN);
         _cameraservice.m_PPPPChannelMgt->PTZ_Control([[_cameraservice cameraId] UTF8String], CMD_PTZ_DOWN_STOP);
     }
-}*/
+}
 
 @end
