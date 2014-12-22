@@ -26,7 +26,7 @@
 @property MBProgressHUD *progress;
 
 @property CameraService *cameraservice;
-@property (nonatomic, retain) IBOutlet UIImageView* playView;
+
 @property (weak, nonatomic) IBOutlet UIView *view1;
 @property (weak, nonatomic) IBOutlet UIView *view2;
 

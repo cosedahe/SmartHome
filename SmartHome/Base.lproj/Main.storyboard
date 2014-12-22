@@ -1079,9 +1079,6 @@
                                         <rect key="frame" x="76" y="44" width="204" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
-                                        <connections>
-                                            <segue destination="bQ9-nf-giv" kind="modal" identifier="camera_to_play" id="WcI-Vh-bCn"/>
-                                        </connections>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="v4P-xQ-YMT">
                                         <rect key="frame" x="76" y="85" width="204" height="30"/>
@@ -1107,20 +1104,17 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZSk-Dm-PgC">
-                                <rect key="frame" x="0.0" y="305" width="320" height="263"/>
-                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.8440896739" green="0.8440896739" blue="0.8440896739" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <connections>
-                        <outlet property="playView" destination="ZSk-Dm-PgC" id="iYZ-z1-edn"/>
                         <outlet property="text_cameraID" destination="aWG-a3-hlN" id="ccd-Ye-aum"/>
                         <outlet property="text_pwd" destination="v4P-xQ-YMT" id="zke-ib-rtX"/>
                         <outlet property="text_user" destination="hER-Z9-rEa" id="RTf-na-NI0"/>
                         <outlet property="view1" destination="Bgx-Ws-ewq" id="Ezt-rG-9Th"/>
                         <outlet property="view2" destination="qBc-4S-bNM" id="B6C-EQ-xyA"/>
                         <segue destination="g9x-2h-qfm" kind="modal" identifier="camera_to_room" id="Xmy-bL-stf"/>
+                        <segue destination="bQ9-nf-giv" kind="modal" identifier="camera_to_play" id="Xs5-U2-Zwq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fqR-Sj-Mg3" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1211,6 +1205,15 @@
                                     <action selector="btn_menu_onClick:" destination="bQ9-nf-giv" eventType="touchUpInside" id="o3n-Uc-u18"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uty-Pf-Lw9">
+                                <rect key="frame" x="128" y="480" width="44" height="40"/>
+                                <state key="normal" image="ptz_audio_off.png">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="btn_audioonoff_onClick:" destination="bQ9-nf-giv" eventType="touchUpInside" id="MoQ-pp-nYL"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.35040872540000001" blue="0.72407863449999998" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -1241,6 +1244,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="btn_audioonoff" destination="Uty-Pf-Lw9" id="SlA-iz-5qQ"/>
                         <outlet property="playView" destination="8he-hJ-fPF" id="gAv-vY-B8a"/>
                         <segue destination="g9x-2h-qfm" kind="modal" identifier="cameraplay_to_room" id="0aO-O7-a4c"/>
                         <segue destination="Vx6-V3-pXi" kind="modal" identifier="cameraPlay_to_menu" id="niF-OZ-slE"/>
@@ -1248,7 +1252,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OHX-Dj-Bxn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-4107" y="-1017"/>
+            <point key="canvasLocation" x="-4085" y="-1049"/>
         </scene>
         <!--Camera Setting View Controller-->
         <scene sceneID="INE-2t-qro">
@@ -2196,6 +2200,7 @@
         <image name="light_turnon.png" width="114" height="155"/>
         <image name="pattern_add.png" width="47" height="47"/>
         <image name="pic_room.png" width="153" height="153"/>
+        <image name="ptz_audio_off.png" width="40" height="40"/>
         <image name="right.png" width="96" height="96"/>
         <image name="setting_carma.png" width="512" height="512"/>
         <image name="television_mute1.png" width="127" height="121"/>
@@ -2210,12 +2215,12 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="7yy-oc-pqz"/>
         <segue reference="0aO-O7-a4c"/>
         <segue reference="f4a-KG-yW2"/>
-        <segue reference="Rfw-fF-jA5"/>
-        <segue reference="oI6-zV-JIF"/>
+        <segue reference="l2K-fW-MdR"/>
+        <segue reference="7yy-oc-pqz"/>
         <segue reference="Ml1-fw-6Wh"/>
+        <segue reference="oI6-zV-JIF"/>
         <segue reference="mLP-c0-w6v"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

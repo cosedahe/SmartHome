@@ -21,6 +21,7 @@
 
 -(void)viewDidAppear:(BOOL)animated
 {
+    /*
     if([[_cameraservice cameraId] isEqualToString:@""] || [[_cameraservice user] isEqualToString:@""] || [[_cameraservice pwd] isEqualToString:@""])
     {
         [_cameraservice.m_PPPPChannelMgtCondition lock];
@@ -33,6 +34,40 @@
         [_cameraservice.m_PPPPChannelMgtCondition unlock];
         [self dismissModalViewControllerAnimated:NO];
     }
+     */
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    _cameraservice = [CameraService getInstance];
+    _cameraservice.m_PPPPChannelMgt->pCameraViewController = self;
+    
+    if([[_cameraservice cameraId] isEqualToString:@""] || [[_cameraservice user] isEqualToString:@""] || [[_cameraservice pwd] isEqualToString:@""])
+    {
+        [_cameraservice.m_PPPPChannelMgtCondition lock];
+        if (_cameraservice.m_PPPPChannelMgt == NULL) {
+            [_cameraservice.m_PPPPChannelMgtCondition unlock];
+            [self dismissModalViewControllerAnimated:NO];
+            return;
+        }
+        _cameraservice.m_PPPPChannelMgt->StopAll();
+        [_cameraservice.m_PPPPChannelMgtCondition unlock];
+        [self dismissModalViewControllerAnimated:NO];
+    }
+    
+#ifndef SHOULD_STOP
+    [NSThread detachNewThreadSelector:@selector(startPlay) toTarget:self withObject:nil];
+#endif
+    
+    // Do any additional setup after loading the view.
+    _alertView = [[UIAlertView alloc]
+                              initWithTitle:@"警告"
+                              message:@""
+                              delegate:self
+                              cancelButtonTitle:@"确定"
+                              otherButtonTitles:nil];
+    _playView.contentMode = UIViewContentModeScaleAspectFit;
     
     UISwipeGestureRecognizer *recognizer;
     recognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipes:)];
@@ -50,25 +85,6 @@
     recognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipes:)];
     recognizer.direction = UISwipeGestureRecognizerDirectionLeft;
     [self.view addGestureRecognizer:recognizer];
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    _cameraservice = [CameraService getInstance];
-    _cameraservice.m_PPPPChannelMgt->pCameraViewController = self;
-#ifndef SHOULD_STOP
-    [NSThread detachNewThreadSelector:@selector(startPlay) toTarget:self withObject:nil];
-#endif
-    
-    // Do any additional setup after loading the view.
-    _alertView = [[UIAlertView alloc]
-                              initWithTitle:@"警告"
-                              message:@""
-                              delegate:self
-                              cancelButtonTitle:@"确定"
-                              otherButtonTitles:nil];
-    _playView.contentMode = UIViewContentModeScaleAspectFit;
 }
 
 -(void)startPlay
@@ -390,6 +406,24 @@
 - (IBAction)btn_close_onClick:(id)sender {
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"退出摄像头" message:@"确定退出摄像头？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     [alertView show];
+}
+
+bool isAudioOn = NO;
+- (IBAction)btn_audioonoff_onClick:(id)sender {
+    if(isAudioOn == NO)
+    {
+        isAudioOn = YES;
+        [_btn_audioonoff setImage:[ UIImage imageNamed:@"ptz_audio_on.png"] forState:UIControlStateNormal];
+        //_cameraservice.m_PPPPChannelMgt->StartPPPPTalk([_cameraservice.cameraId UTF8String]);
+        _cameraservice.m_PPPPChannelMgt->StartPPPPAudio([_cameraservice.cameraId UTF8String]);
+    }
+    else
+    {
+        isAudioOn = NO;
+        [_btn_audioonoff setImage:[ UIImage imageNamed:@"ptz_audio_off.png"] forState:UIControlStateNormal];
+        //_cameraservice.m_PPPPChannelMgt->StopPPPPTalk([_cameraservice.cameraId UTF8String]);
+        _cameraservice.m_PPPPChannelMgt->StopPPPPAudio([_cameraservice.cameraId UTF8String]);
+    }
 }
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex

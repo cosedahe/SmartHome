@@ -56,6 +56,7 @@
         NSLog(@"密码为空");
         return;
     }
+    _cameraservice.m_PPPPChannelMgt->SetUserPwdParamDelegate((char *)[_cameraservice.cameraId UTF8String], self);
     _cameraservice.m_PPPPChannelMgt->SetUserPwd((char *)[_cameraservice.cameraId UTF8String], "", "", "", "", (char *)[_cameraservice.user UTF8String], (char *)[self.text_newPwd.text UTF8String]);
 }
 

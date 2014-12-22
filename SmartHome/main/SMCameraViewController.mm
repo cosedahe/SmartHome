@@ -31,7 +31,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self.playView setHidden:YES];
     _cameraservice = [CameraService getInstance];
     
     deviceList = [[NSMutableArray alloc] init];

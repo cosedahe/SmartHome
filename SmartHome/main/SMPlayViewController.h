@@ -37,4 +37,7 @@
 - (IBAction)btn_right_upInside:(id)sender;
 - (IBAction)btn_menu_onClick:(id)sender;
 - (IBAction)btn_close_onClick:(id)sender;
+- (IBAction)btn_audioonoff_onClick:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *btn_audioonoff;
+
 @end
