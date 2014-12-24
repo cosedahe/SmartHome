@@ -214,4 +214,33 @@
     airmodelist = [airdao getListByFatherId:[furniture getId]];
     [self.airlistView reloadData];
 }
+
+-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
+-(NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return @"删除";
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // delete elemenet
+#warning delete element
+        AirBean *bean = [airmodelist objectAtIndex:indexPath.row];
+        [airdao deleteObj:bean];
+        [airmodelist removeObject:bean];
+        //[tableView reloadData];
+        //[self.airlistView reloadData];
+        [self performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+    }
+}
+
+-(void)reloadData
+{
+    [self.airlistView reloadData];
+}
+
 @end
