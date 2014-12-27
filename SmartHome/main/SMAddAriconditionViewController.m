@@ -116,7 +116,6 @@ int tempIndex = 16;
         }
         // return to aircondition view
         [self dismissModalViewControllerAnimated:YES];
-#warning return to aircondition view
     }
 }
 
@@ -130,7 +129,6 @@ int tempIndex = 16;
         self.btn_model.titleLabel.text = modelName;
         
     };
-#warning set selectedIndex
     [SGActionView showSheetWithTitle:@"选择模式类型"
                           itemTitles:modelArray
                        itemSubTitles:nil
@@ -144,7 +142,6 @@ int tempIndex = 16;
         windspeedName = [speedArray objectAtIndex:index];
         self.btn_speed.titleLabel.text = windspeedName;
     };
-#warning set selectedIndex
     [SGActionView showSheetWithTitle:@"选择所选模式的风速"
                           itemTitles:speedArray
                        itemSubTitles:nil

@@ -122,4 +122,9 @@
     UIAlertView *alertview = [[UIAlertView alloc] initWithTitle:@"警告" message:@"当前设备已删除，请重新选择设备" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
     [alertview show];
 }
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    UIView *footView = [[UIView alloc] init];
+    return footView;
+}
 @end

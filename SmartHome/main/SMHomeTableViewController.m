@@ -40,10 +40,16 @@ static NSString *roomId;
     NSLog(@"roomlist count:%d", [self.listItems count]);
     [self.tableView setDataSource:self];
     [self.tableView setDelegate:self];
+    //self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     UILongPressGestureRecognizer *gestureLongPress = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(gestureLongPress:)];
     //gestureLongPress.minimumPressDuration = 1;
     [self.tableView addGestureRecognizer:gestureLongPress];
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    UIView *footView = [[UIView alloc] init];
+    return footView;
 }
 
 - (void)didReceiveMemoryWarning

@@ -299,4 +299,9 @@ BOOL isEditingAir = NO;
     }
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    UIView *footView = [[UIView alloc] init];
+    return footView;
+}
+
 @end
