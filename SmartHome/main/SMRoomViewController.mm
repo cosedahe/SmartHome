@@ -8,6 +8,10 @@
 
 #import "SMRoomViewController.h"
 #import "CameraService.h"
+#import "mytoast.h"
+#import <sys/socket.h>
+#import <netinet/in.h>
+#import "SocketChatUtils.h"
 
 static int newButtonNumber = 0;
 
@@ -60,6 +64,10 @@ static int newButtonNumber = 0;
     //[[UDPSocketTask getInstance] setReceiveMessageListerner:[[loginOnReceiverMessageListener alloc] init]];
     cameraservice = [CameraService getInstance];
     cameraservice.roomId = roomId;
+    
+    UILongPressGestureRecognizer *gestureLongPress = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(gestureLongPress:)];
+    //gestureLongPress.minimumPressDuration = 1;
+    [self.tableView addGestureRecognizer:gestureLongPress];
 }
 
 - (void)didReceiveMemoryWarning
@@ -251,16 +259,135 @@ static int newButtonNumber = 0;
 
 
 - (IBAction)btn_add_onClick:(id)sender {
+    
     SGMenuActionHandler handler = ^(NSInteger index)
     {
         NSLog(@"index=%ld",(long)index);
-        
-        FurnitureBean *myFurniture = [[FurnitureBean alloc] init];
-        [myFurniture setRoomId:[roomId intValue]];
-        
-        switch(index)
+        [NSThread detachNewThreadSelector:@selector(handleAdd:) toTarget:self withObject:[NSNumber numberWithInteger:index]];
+    };
+    
+    [SGActionView showGridMenuWithTitle:@"新设备的种类是："
+                             itemTitles:@[ @"灯光", @"空调", @"报警", @"摄像头",
+                                           @"窗帘", @"电视", @"插座", @"功放", @"下载" ]
+                                 images:@[ [UIImage imageNamed:@"icon_light"],
+                                           [UIImage imageNamed:@"icon_aircondition"],
+                                           [UIImage imageNamed:@"icon_alarmbell"],
+                                           [UIImage imageNamed:@"icon_camera"],
+                                           [UIImage imageNamed:@"icon_curtain"],
+                                           [UIImage imageNamed:@"icon_television"],
+                                           [UIImage imageNamed:@"icon_outlet"],
+                                           [UIImage imageNamed:@"add_room_breakgroundmusic2"],
+                                           [UIImage imageNamed:@"add_room_download1"]]
+                         selectedHandle:handler];
+}
+
+-(void)handleAdd:(NSNumber *)index
+{
+    FurnitureBean *myFurniture = [[FurnitureBean alloc] init];
+    [myFurniture setRoomId:[roomId intValue]];
+    
+    switch([index integerValue])
+    {
+        case 1:
+            [myFurniture setTag:@"light"];
+            for(FurnitureBean *bean in furniturelist)
+            {
+                if([[bean getTag] isEqualToString:@"light"])
+                    newButtonNumber++;
+            }
+            [myFurniture setName:[[NSString alloc] initWithFormat:@"灯%d",newButtonNumber]];
+            newButtonNumber = 0;
+            break;
+        case 6:
+            [myFurniture setTag:@"television"];
+            for(FurnitureBean *bean in furniturelist)
+            {
+                if([[bean getTag] isEqualToString:@"television"])
+                    newButtonNumber++;
+            }
+            [myFurniture setName:[[NSString alloc] initWithFormat:@"电视机%d",newButtonNumber]];
+            newButtonNumber = 0;
+            break;
+        case 4:
+            [myFurniture setTag:@"camera"];
+            for(FurnitureBean *bean in furniturelist)
+            {
+                if([[bean getTag] isEqualToString:@"camera"])
+                    newButtonNumber++;
+            }
+            [myFurniture setName:[[NSString alloc] initWithFormat:@"摄像头%d",newButtonNumber]];
+            newButtonNumber = 0;
+            break;
+        case 2:
+            [myFurniture setTag:@"aircondition"];
+            for(FurnitureBean *bean in furniturelist)
+            {
+                if([[bean getTag] isEqualToString:@"aircondition"])
+                    newButtonNumber++;
+            }
+            [myFurniture setName:[[NSString alloc] initWithFormat:@"空调%d",newButtonNumber]];
+            newButtonNumber = 0;
+            break;
+        case 3:
+            [myFurniture setTag:@"alarmbell"];
+            for(FurnitureBean *bean in furniturelist)
+            {
+                if([[bean getTag] isEqualToString:@"alarmbell"])
+                    newButtonNumber++;
+            }
+            [myFurniture setName:[[NSString alloc] initWithFormat:@"警铃%d",newButtonNumber]];
+            newButtonNumber = 0;
+            break;
+        case 5:
+            [myFurniture setTag:@"curtain"];
+            for(FurnitureBean *bean in furniturelist)
+            {
+                if([[bean getTag] isEqualToString:@"curtain"])
+                    newButtonNumber++;
+            }
+            [myFurniture setName:[[NSString alloc] initWithFormat:@"窗帘%d",newButtonNumber]];
+            newButtonNumber = 0;
+            break;
+        case 7:
+            [myFurniture setTag:@"outlet"];
+            for(FurnitureBean *bean in furniturelist)
+            {
+                if([[bean getTag] isEqualToString:@"outlet"])
+                    newButtonNumber++;
+            }
+            [myFurniture setName:[[NSString alloc] initWithFormat:@"插座%d",newButtonNumber]];
+            newButtonNumber = 0;
+            break;
+        case 8:
+            [myFurniture setTag:@"backgroundmusic"];
+            for(FurnitureBean *bean in furniturelist)
+            {
+                if([[bean getTag] isEqualToString:@"backgroundmusic"])
+                    newButtonNumber++;
+            }
+            [myFurniture setName:[[NSString alloc] initWithFormat:@"功放%d",newButtonNumber]];
+            newButtonNumber = 0;
+            break;
+        case 9:/*导出*/
         {
-            case 1:
+            [self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
+            //[self showProgress];
+            
+            /*download settings*/
+            NSString *result = [self getUdpSocket];
+            NSLog(@"导入：%@", result);
+            
+            /*handling message*/
+            if(result != nil && ![result isEqualToString:@""])
+            {
+                // <tage=light,downcode=12891,12892>
+                result = [result substringToIndex:([result length] - 1)];
+                NSString *downcodeStr = [[result componentsSeparatedByString:@"="] objectAtIndex:2];
+                NSString *tag = [[[[result componentsSeparatedByString:@"="] objectAtIndex:1] componentsSeparatedByString:@","] objectAtIndex:0];
+                NSArray *downcodes = [downcodeStr componentsSeparatedByString:@","];
+                NSLog(@"TAG = %@, downcode1 = %@, downcode2 = %@", tag, downcodes[0], downcodes[1]);
+#warning check if it is exist
+                // add to furniture
                 [myFurniture setTag:@"light"];
                 for(FurnitureBean *bean in furniturelist)
                 {
@@ -269,101 +396,143 @@ static int newButtonNumber = 0;
                 }
                 [myFurniture setName:[[NSString alloc] initWithFormat:@"灯%d",newButtonNumber]];
                 newButtonNumber = 0;
-                break;
-            case 6:
-                [myFurniture setTag:@"television"];
-                for(FurnitureBean *bean in furniturelist)
+                [myFurniture setDescription:[myFurniture getTag]];
+                int fId = [furnituredao add:myFurniture];
+                [myFurniture setId:fId];
+                [furniturelist addObject:myFurniture];
+                
+                // add widget
+                WidgetBean *widget = [[WidgetBean alloc] init];
+                WidgetDao *widgetdao = [[WidgetDao alloc] init];
+                [widget setFurnitureId:[myFurniture getId]];
+                [widget setTag:[myFurniture getTag]];
+                
+                for(int i = 0; i < [downcodes count]; i++)
                 {
-                    if([[bean getTag] isEqualToString:@"television"])
-                        newButtonNumber++;
+                    [widget setDowncode:[downcodes[i] longLongValue]];
+                    [widget setWidgetid:i];
+                    NSMutableArray *temp = [widgetdao getListByFatherIdAndWIdgetId:[myFurniture getId] :[widget getWidgetid]];
+                    if([temp count] == 0)
+                    {
+                        [widgetdao add:widget];
+                    }
                 }
-                [myFurniture setName:[[NSString alloc] initWithFormat:@"电视机%d",newButtonNumber]];
-                newButtonNumber = 0;
-                break;
-            case 4:
-                [myFurniture setTag:@"camera"];
-                for(FurnitureBean *bean in furniturelist)
-                {
-                    if([[bean getTag] isEqualToString:@"camera"])
-                        newButtonNumber++;
-                }
-                [myFurniture setName:[[NSString alloc] initWithFormat:@"摄像头%d",newButtonNumber]];
-                newButtonNumber = 0;
-                break;
-            case 2:
-                [myFurniture setTag:@"aircondition"];
-                for(FurnitureBean *bean in furniturelist)
-                {
-                    if([[bean getTag] isEqualToString:@"aircondition"])
-                        newButtonNumber++;
-                }
-                [myFurniture setName:[[NSString alloc] initWithFormat:@"空调%d",newButtonNumber]];
-                newButtonNumber = 0;
-                break;
-            case 3:
-                [myFurniture setTag:@"alarmbell"];
-                for(FurnitureBean *bean in furniturelist)
-                {
-                    if([[bean getTag] isEqualToString:@"alarmbell"])
-                        newButtonNumber++;
-                }
-                [myFurniture setName:[[NSString alloc] initWithFormat:@"警铃%d",newButtonNumber]];
-                newButtonNumber = 0;
-                break;
-            case 5:
-                [myFurniture setTag:@"curtain"];
-                for(FurnitureBean *bean in furniturelist)
-                {
-                    if([[bean getTag] isEqualToString:@"curtain"])
-                        newButtonNumber++;
-                }
-                [myFurniture setName:[[NSString alloc] initWithFormat:@"窗帘%d",newButtonNumber]];
-                newButtonNumber = 0;
-                break;
-            case 7:
-                [myFurniture setTag:@"outlet"];
-                for(FurnitureBean *bean in furniturelist)
-                {
-                    if([[bean getTag] isEqualToString:@"outlet"])
-                        newButtonNumber++;
-                }
-                [myFurniture setName:[[NSString alloc] initWithFormat:@"插座%d",newButtonNumber]];
-                newButtonNumber = 0;
-                break;
-            case 8:
-                [myFurniture setTag:@"backgroundmusic"];
-                for(FurnitureBean *bean in furniturelist)
-                {
-                    if([[bean getTag] isEqualToString:@"backgroundmusic"])
-                        newButtonNumber++;
-                }
-                [myFurniture setName:[[NSString alloc] initWithFormat:@"功放%d",newButtonNumber]];
-                newButtonNumber = 0;
-                break;
-                default:
-                break;
+                
+                [self.tableView reloadData];
+            }
+            [self performSelectorOnMainThread:@selector(dismisProgress) withObject:nil waitUntilDone:NO];
+            //[self dismisProgress];
+        }
+            return;
+            break;
+        default:
+            break;
+    }
+    
+    [myFurniture setDescription:[myFurniture getTag]];
+    int fId = [furnituredao add:myFurniture];
+    [myFurniture setId:fId];
+    [furniturelist addObject:myFurniture];
+    
+    [self.tableView reloadData];
+}
+
+-(void)showProgress
+{
+    _progress = [[MBProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:_progress];
+    _progress.delegate = self;
+    _progress.labelText = @"正在下载...";
+    [self.view bringSubviewToFront:_progress];
+    [_progress show:YES];
+    
+    /*_progress = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    _progress.mode = MBProgressHUDModeAnnularDeterminate;
+    _progress.labelText = @"正在导入...";
+    [self.view bringSubviewToFront:_progress];
+    [_progress show:YES];
+     */
+}
+
+-(void)dismisProgress
+{
+    if(_progress)
+    {
+        [_progress removeFromSuperview];
+        _progress = nil;
+    }
+}
+
+-(NSString *)getUdpSocket
+{
+    // consider as server
+    NSString *result = [[NSString alloc] init];
+    int sock;
+    @try
+    {
+        struct sockaddr_in addr;
+        addr.sin_family = AF_INET;
+        addr.sin_port = htons(6666);
+        addr.sin_addr.s_addr = htonl(INADDR_ANY);
+        
+        if ( (sock = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
+        {
+            perror("socket");
+            exit(1);
+        }
+        if (bind(sock, (struct sockaddr *)&addr, sizeof(addr)) < 0)
+        {
+            perror("bind");
+            exit(1);
         }
         
-        [myFurniture setDescription:[myFurniture getTag]];
-        int fId = [furnituredao add:myFurniture];
-        [myFurniture setId:fId];
-        [furniturelist addObject:myFurniture];
-
-        [self.tableView reloadData];
-    };
-    
-    [SGActionView showGridMenuWithTitle:@"新设备的种类是："
-                             itemTitles:@[ @"灯光", @"空调", @"报警", @"摄像头",
-                                           @"窗帘", @"电视", @"插座", @"功放" ]
-                                 images:@[ [UIImage imageNamed:@"icon_light"],
-                                           [UIImage imageNamed:@"icon_aircondition"],
-                                           [UIImage imageNamed:@"icon_alarmbell"],
-                                           [UIImage imageNamed:@"icon_camera"],
-                                           [UIImage imageNamed:@"icon_curtain"],
-                                           [UIImage imageNamed:@"icon_television"],
-                                           [UIImage imageNamed:@"icon_outlet"],
-                                           [UIImage imageNamed:@"add_room_breakgroundmusic2"]]
-                         selectedHandle:handler];
+        char buff[512];
+        struct sockaddr_in clientAddr;
+        int n;
+        int len = sizeof(clientAddr);
+        struct timeval tv_out;
+        fd_set readfds;
+        FD_ZERO(&readfds);
+        FD_SET(sock, &readfds);
+        
+        tv_out.tv_sec = 30;
+        tv_out.tv_usec = 0;
+        int retVal = 0;
+        @try
+        {
+            retVal = select(sock+1, &readfds, NULL, NULL, &tv_out);
+            if(retVal >= 0)
+            {
+                if(FD_ISSET(sock, &readfds) > 0)
+                {
+                    n = recvfrom(sock, buff, sizeof(buff) - 1, 0, (struct sockaddr *)&clientAddr, (socklen_t *)&len);
+                    
+                    if (n>0)
+                    {
+                        buff[n] = 0;
+                    }
+                    else
+                    {
+                        perror("recv");
+                    }
+                }
+            }
+        }
+        @catch(NSException *e)
+        {
+            NSLog(@"##SMRoomViewController## receive error:%@", e);
+        }
+        
+        //result = [NSString stringWithCString encoding:NSUTF8StringEncoding];
+        result = [NSString stringWithUTF8String:(const char *)buff];
+        close(sock);
+        return result;
+    }
+    @catch(NSException *e)
+    {
+        close(sock);
+    }
+    return nil;
 }
 
 - (IBAction)btn_back_onclick:(id)sender {
@@ -415,56 +584,121 @@ static int newButtonNumber = 0;
         self.btn_connect_host.titleLabel.text = @"连接主机";
 }
 
-#define BUTTONTURNON    0x01
-#define BUTTONTURNOFF   0x02
-#define BUTTONSTOP      0x03
-/*-(void)initDao:(SMFurnitureTableViewCell *)cell
+NSInteger FIndexRow = -1;
+-(void)gestureLongPress:(UILongPressGestureRecognizer *)gestureRecognizer
 {
-    NSMutableArray *buttonlist = [[NSMutableArray alloc] init];
-    NSMutableArray *widgetid = [[NSMutableArray alloc] init];
-    NSMutableArray *widgetlist = [[NSMutableArray alloc] init];
-    RoomBean *roombean = [[RoomBean alloc] init];
-    RoomDao *roomdao = [[RoomDao alloc] init];
-    FurnitureBean *furniture = [[FurnitureBean alloc] init];
-    WidgetService *widgetservice;
-    WidgetDao *widgetdao;
-    
-    furnituredao = [[FurnitureDao alloc] init];
-    roomdao = [[RoomDao alloc] init];
-    NSString *type = cell.label_furniture_tag.text;
-    if([type isEqualToString:@"light"])
+    CGPoint tmpPointTouch = [gestureRecognizer locationInView:self.tableView];
+    if (gestureRecognizer.state ==UIGestureRecognizerStateBegan) {
+        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:tmpPointTouch];
+        if (indexPath == nil) {
+            NSLog(@"not tableView");
+        }else{
+            FIndexRow = indexPath.row;
+            UIAlertView *alertView;
+            if([[[furniturelist objectAtIndex:FIndexRow] getTag] isEqualToString:@"light"])
+            {
+                alertView = [[UIAlertView alloc] initWithTitle:@"请选择要执行的操作:" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"编辑(暂不支持)",@"删除",@"导出", nil];
+            }
+            else
+            {
+                alertView = [[UIAlertView alloc] initWithTitle:@"请选择要执行的操作:" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"编辑(暂不支持)",@"删除", nil];
+            }
+            [alertView show];
+        }
+    }
+}
+
+BOOL isEditingFurniture = NO;
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(buttonIndex == 1)
     {
-        [buttonlist addObject:[NSNumber numberWithInt:BUTTONTURNON]];
-        [buttonlist addObject:[NSNumber numberWithInt:BUTTONTURNOFF]];
+        /*编辑*/
+        isEditingFurniture = YES;
+        //[self performSegueWithIdentifier:@"home_to_addroom" sender:self];
+    }
+    else if (buttonIndex == 2)
+    {
+        /*删除*/
+        WidgetDao *dao = [[WidgetDao alloc] init];
+        FurnitureBean *bean = [furniturelist objectAtIndex:FIndexRow];
+        [furniturelist removeObjectAtIndex:FIndexRow];
+        [dao deleteByFatherId:[bean getId]];
+        [furnituredao deleteObj:bean];
+        [self.tableView reloadData];
+        FIndexRow = -1;
+    }
+    else if (buttonIndex == 0)
+    {
+        /*取消*/
+    }
+    else if (buttonIndex == 3)
+    {
+        /*导出*/
+        //[];
+        [NSThread detachNewThreadSelector:@selector(exportWidgets) toTarget:self withObject:nil];
+    }
+}
+
+-(void)exportWidgets
+{
+    WidgetDao *widgetdao = [[WidgetDao alloc] init];
+    int myId = [[furniturelist objectAtIndex:FIndexRow] getId];
+    NSMutableArray *importWidgets = [widgetdao getListByFatherId:myId];
+    if([importWidgets count] != 0)
+    {
+        [mytoast showWithText:@"正在导出，请接收！！"];
+        NSMutableString *downcode = [[NSMutableString alloc] init];
+        for(int i = 0; i < [importWidgets count]; i++)
+        {
+            if(i == [importWidgets count] - 1)
+            {
+                [downcode appendFormat:@"%ld",[[importWidgets objectAtIndex:i] getDowncode]];
+            }
+            else
+            {
+                [downcode appendFormat:@"%ld",[[importWidgets objectAtIndex:i] getDowncode]];
+                [downcode appendString:@","];
+            }
+        }
+        
+        NSMutableString *name = [[NSMutableString alloc] init];
+        [name appendFormat:@"<tage=%@%@%@%@",[[furniturelist objectAtIndex:FIndexRow] getTag],@",downcode=",downcode,@">"];
+        NSLog(@"导出:%@", name);
+        
+        // send export message while socket
+        @try
+        {
+            int sockfd;
+            struct sockaddr_in addr;
+            int so_broadcast=1;
+            
+            bzero(&addr, sizeof(addr));
+            addr.sin_family=AF_INET;
+            addr.sin_port=htons(6666);
+            addr.sin_addr.s_addr=htonl(INADDR_BROADCAST);
+            bzero(&(addr.sin_zero),8);
+            
+            sockfd = socket(AF_INET, SOCK_DGRAM, 0); /* create a socket */
+            setsockopt(sockfd,SOL_SOCKET,SO_BROADCAST,&so_broadcast,sizeof(so_broadcast));
+            
+            /*send message*/
+            for(int j = 0; j < 4; j++)
+            {
+                sendto(sockfd, [name UTF8String], [name length], 0, (struct sockaddr *)&addr, sizeof(addr));
+                [NSThread sleepForTimeInterval:2.0f];
+            }
+        }
+        @catch(NSException *e)
+        {
+            NSLog(@"#####Exception:%@",e);
+        }
     }
     else
     {
-#warning TODO: handle other furniture type
-        return;
+        [mytoast showWithText:@"导入失败，请先学习！！"];
     }
-    
-    furniture = [furnituredao getFurnitureByNameAndTagAndFatherId:cell.label_furniture_name.text :cell.label_furniture_tag.text :[cell.label_roomid.text intValue]];
-    
-    roombean = [roomdao getInstanceById:[cell.label_roomid.text intValue]];
-    if(widgetservice == nil)
-    {
-        widgetservice = [[WidgetService alloc] init];
-    }
-    if(widgetdao == nil)
-        widgetdao = [[WidgetDao alloc] init];
-    
-    widgetlist = [widgetdao getListByFatherId:[furniture getId]];
-    if([widgetlist count] == 0)
-    {
-        for(int i = 0; i < [buttonlist count]; i++)
-        {
-            [widgetid addObject:[[NSNumber alloc] initWithInt:i]];
-        }
-        widgetlist = [widgetservice addWidget:furniture :widgetid];
-    }
-    
-    [cell setlists:widgetlist :buttonlist];
+}
 
-}*/
 
 @end

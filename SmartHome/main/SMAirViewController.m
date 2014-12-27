@@ -86,6 +86,10 @@
     [self.airlistView setSectionIndexColor:[UIColor clearColor]];
     socketmessage = [SocketMessage getInstance];
     [self initDao];
+    
+    UILongPressGestureRecognizer *gestureLongPress = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(gestureLongPress:)];
+    //gestureLongPress.minimumPressDuration = 1;
+    [self.airlistView addGestureRecognizer:gestureLongPress];
 }
 
 - (void)didReceiveMemoryWarning
@@ -106,6 +110,18 @@
     {
         id theSegue = [segue destinationViewController];
         [theSegue setValue:furniture forKey:@"furniture"];
+        if(isEditingAir)
+        {
+            AirBean *air = [[AirBean alloc] init];
+            air = [airmodelist objectAtIndex:indexAirRow];
+            [theSegue setValue:air forKey:@"air"];
+            indexAirRow = -1;
+            isEditingAir = NO;
+        }
+        else
+        {
+            [theSegue setValue:nil forKey:@"air"];
+        }
     }
 }
 
@@ -241,6 +257,46 @@
 -(void)reloadData
 {
     [self.airlistView reloadData];
+}
+
+NSInteger indexAirRow = -1;
+-(void)gestureLongPress:(UILongPressGestureRecognizer *)gestureRecognizer
+{
+    CGPoint tmpPointTouch = [gestureRecognizer locationInView:self.airlistView];
+    if (gestureRecognizer.state ==UIGestureRecognizerStateBegan) {
+        NSIndexPath *indexPath = [self.airlistView indexPathForRowAtPoint:tmpPointTouch];
+        if (indexPath == nil) {
+            NSLog(@"not tableView");
+        }else{
+            indexAirRow = indexPath.row;
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"请选择要执行的操作:" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"编辑",@"删除", nil];
+            [alertView show];
+        }
+    }
+}
+
+BOOL isEditingAir = NO;
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(buttonIndex == 1)
+    {
+        /*编辑*/
+        isEditingAir = YES;
+        [self performSegueWithIdentifier:@"air_to_add" sender:self];
+    }
+    else if (buttonIndex == 2)
+    {
+        /*删除*/
+        AirBean *bean = [airmodelist objectAtIndex:indexAirRow];
+        [airdao deleteObj:bean];
+        [airmodelist removeObject:bean];
+        [self.airlistView reloadData];
+        indexAirRow = -1;
+    }
+    else if (buttonIndex == 0)
+    {
+        /*取消*/
+    }
 }
 
 @end

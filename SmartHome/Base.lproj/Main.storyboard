@@ -825,7 +825,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="uCq-4O-QiM" kind="modal" id="lQ2-Tg-o1b"/>
+                                    <segue destination="uCq-4O-QiM" kind="modal" identifier="home_to_addroom" id="lQ2-Tg-o1b"/>
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="132" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="hnu-T8-tkI">
@@ -1572,6 +1572,7 @@
                         <outlet property="btn_speed" destination="Yxn-Um-WSI" id="ibE-OK-3PH"/>
                         <outlet property="label_temp" destination="7rT-JE-sxW" id="TMS-tN-lIn"/>
                         <outlet property="slider_tmp" destination="iAb-tO-CT4" id="rfa-VJ-cCA"/>
+                        <segue destination="zkN-mq-Pdu" kind="modal" identifier="addair_toair" id="vz0-tt-3no"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E1b-LT-Xj6" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2215,13 +2216,14 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="0aO-O7-a4c"/>
-        <segue reference="f4a-KG-yW2"/>
-        <segue reference="l2K-fW-MdR"/>
-        <segue reference="7yy-oc-pqz"/>
         <segue reference="Ml1-fw-6Wh"/>
         <segue reference="oI6-zV-JIF"/>
         <segue reference="mLP-c0-w6v"/>
+        <segue reference="vz0-tt-3no"/>
+        <segue reference="SJ4-ex-mgP"/>
+        <segue reference="f4a-KG-yW2"/>
+        <segue reference="0aO-O7-a4c"/>
+        <segue reference="l2K-fW-MdR"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
 </document>

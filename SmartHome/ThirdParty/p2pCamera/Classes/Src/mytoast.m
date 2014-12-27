@@ -54,7 +54,7 @@
         self = nil;
     }
     else if ([animationID isEqualToString:@"show"]) {
-        [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(__hide) userInfo:nil repeats:NO];
+        [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(__hide) userInfo:nil repeats:NO];
     }
 }
 + (mytoast *)__createWithText:(NSString *)text {

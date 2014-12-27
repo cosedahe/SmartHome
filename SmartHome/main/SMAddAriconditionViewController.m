@@ -35,10 +35,11 @@ int tempIndex = 16;
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    modelIndex = 0;
+    speedIndex = 0;
+    tempIndex = 16;
     [self initDao];
     name = @"空调温度";
-#warning set initial state of type,speed and temp
-    
 }
 
 - (void)didReceiveMemoryWarning
@@ -172,9 +173,10 @@ int tempIndex = 16;
     
     self.label_temp.text = tmpName;
     self.slider_tmp.value = tempIndex;
-    self.btn_speed.titleLabel.text = windspeedName;
-    self.btn_model.titleLabel.text = modelName;
-    
+    //self.btn_speed.titleLabel.text = windspeedName;
+    //self.btn_model.titleLabel.text = modelName;
+    [self.btn_model setTitle:modelName forState:UIControlStateNormal];
+    [self.btn_speed setTitle:windspeedName forState:UIControlStateNormal];
 }
 
 - (IBAction)slider_temp_changed:(id)sender {

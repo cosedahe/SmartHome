@@ -18,6 +18,7 @@ static NSMutableArray *roomlist;
 @end
 
 @implementation AddRoomViewController
+@synthesize roombean;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -38,6 +39,12 @@ static NSMutableArray *roomlist;
     [self.view addGestureRecognizer:tap];
     // very important make delegate useful
     tap.delegate = self;
+    
+    if(roombean != nil)
+    {
+        self.txt_name.text = [roombean getDescription];
+        self.txt_roomType.text = [roombean getName];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -76,13 +83,19 @@ static NSMutableArray *roomlist;
         [alertView show];
     }
     
-    if(isAddOrUpt)
-    {}
+    RoomDao *roomdao = [[RoomDao alloc] init];
+    if(roombean != nil)
+    {
+        [roombean setName:roomType];
+        [roombean setDescription:roomName];
+        [roomdao updateObj:roombean];
+        [self performSegueWithIdentifier:@"addroom_to_home" sender:self];
+    }
     else
     {
         // 添加房间
-        RoomDao *roomdao = [[RoomDao alloc] init];
-        RoomBean *roombean = [[RoomBean alloc] init];
+        
+        roombean = [[RoomBean alloc] init];
         [roombean setName:roomType];
         [roombean setUserName:[[SocketMessage getInstance] getName]];
         [roombean setDeviceNum:[[SocketMessage getInstance] getServerid]];

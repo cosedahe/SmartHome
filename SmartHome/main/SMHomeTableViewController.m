@@ -41,11 +41,9 @@ static NSString *roomId;
     [self.tableView setDataSource:self];
     [self.tableView setDelegate:self];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    UILongPressGestureRecognizer *gestureLongPress = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(gestureLongPress:)];
+    //gestureLongPress.minimumPressDuration = 1;
+    [self.tableView addGestureRecognizer:gestureLongPress];
 }
 
 - (void)didReceiveMemoryWarning
@@ -114,43 +112,6 @@ static NSString *roomId;
     [self performSegueWithIdentifier:@"home_to_room" sender:self];
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 /*
 #pragma mark - Navigation
@@ -161,6 +122,16 @@ static NSString *roomId;
     {
         id theSegue = segue.destinationViewController;
         [theSegue setValue:roomId forKey:@"roomId"];
+    }
+    else if ([segue.identifier isEqualToString:@"home_to_addroom"])
+    {
+        if(isEditingRoom != NO)
+        {
+            isEditingRoom = YES;
+            id theSegue = segue.destinationViewController;
+            [theSegue setValue:[self.listItems objectAtIndex:indexRow] forKey:@"roombean"];
+            indexRow = -1;
+        }
     }
 }
 
@@ -211,6 +182,49 @@ static NSString *roomId;
 -(void)finishReloadingData
 {
     [self.tableView reloadData];
+}
+
+NSInteger indexRow = -1;
+-(void)gestureLongPress:(UILongPressGestureRecognizer *)gestureRecognizer
+{
+    CGPoint tmpPointTouch = [gestureRecognizer locationInView:self.tableView];
+    if (gestureRecognizer.state ==UIGestureRecognizerStateBegan) {
+        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:tmpPointTouch];
+        if (indexPath == nil) {
+            NSLog(@"not tableView");
+        }else{
+            indexRow = indexPath.row;
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"请选择要执行的操作:" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"编辑",@"删除", nil];
+            [alertView show];
+        }
+    }
+}
+
+BOOL isEditingRoom = NO;
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(buttonIndex == 1)
+    {
+        /*编辑*/
+        isEditingRoom = YES;
+        [self performSegueWithIdentifier:@"home_to_addroom" sender:self];
+    }
+    else if (buttonIndex == 2)
+    {
+        /*删除*/
+        RoomDao *dao = [[RoomDao alloc] init];
+        RoomBean *bean = [self.listItems objectAtIndex:indexRow];
+        FurnitureDao *furnituredao = [[FurnitureDao alloc] init];
+        [furnituredao deleteByFatherId:[bean getId]];
+        [dao deleteObj:bean];
+        [self.listItems removeObject:bean];
+        [self.tableView reloadData];
+        indexRow = -1;
+    }
+    else if (buttonIndex == 0)
+    {
+        /*取消*/
+    }
 }
 
 @end

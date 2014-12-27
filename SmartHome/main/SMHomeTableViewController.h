@@ -11,7 +11,7 @@
 #import "BaseViewController.h"
 #import "FurnitureDao.h"
 
-@interface SMHomeTableViewController : BaseViewController<UITableViewDelegate, UITableViewDataSource>
+@interface SMHomeTableViewController : BaseViewController<UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate>
 
 @property (nonatomic, strong) NSMutableArray *listItems;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;

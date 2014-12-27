@@ -39,6 +39,8 @@
 		04C0433C19AB054B00613062 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04C0431E19AB054A00613062 /* UIKit.framework */; };
 		04C0434419AB054B00613062 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 04C0434219AB054B00613062 /* InfoPlist.strings */; };
 		04C0434619AB054B00613062 /* SmartHomeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C0434519AB054B00613062 /* SmartHomeTests.m */; };
+		1406831A1A4C11BA00552BF6 /* add_room_download1.png in Resources */ = {isa = PBXBuildFile; fileRef = 140683181A4C11BA00552BF6 /* add_room_download1.png */; };
+		1406831B1A4C11BA00552BF6 /* add_room_download2.png in Resources */ = {isa = PBXBuildFile; fileRef = 140683191A4C11BA00552BF6 /* add_room_download2.png */; };
 		140838811A2456E900CEB56E /* abs__spinner_ab_default_holo_light.9.png in Resources */ = {isa = PBXBuildFile; fileRef = 140837131A2456E500CEB56E /* abs__spinner_ab_default_holo_light.9.png */; };
 		140838821A2456E900CEB56E /* actionbar_addroom 2.png in Resources */ = {isa = PBXBuildFile; fileRef = 140837141A2456E500CEB56E /* actionbar_addroom 2.png */; };
 		140838831A2456E900CEB56E /* actionbar_addroom_press 2.png in Resources */ = {isa = PBXBuildFile; fileRef = 140837151A2456E500CEB56E /* actionbar_addroom_press 2.png */; };
@@ -590,6 +592,8 @@
 		04C0434119AB054B00613062 /* SmartHomeTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SmartHomeTests-Info.plist"; sourceTree = "<group>"; };
 		04C0434319AB054B00613062 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		04C0434519AB054B00613062 /* SmartHomeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SmartHomeTests.m; sourceTree = "<group>"; };
+		140683181A4C11BA00552BF6 /* add_room_download1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = add_room_download1.png; path = image/add_room_download1.png; sourceTree = "<group>"; };
+		140683191A4C11BA00552BF6 /* add_room_download2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = add_room_download2.png; path = image/add_room_download2.png; sourceTree = "<group>"; };
 		140837131A2456E500CEB56E /* abs__spinner_ab_default_holo_light.9.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = abs__spinner_ab_default_holo_light.9.png; path = image/abs__spinner_ab_default_holo_light.9.png; sourceTree = "<group>"; };
 		140837141A2456E500CEB56E /* actionbar_addroom 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "actionbar_addroom 2.png"; path = "image/actionbar_addroom 2.png"; sourceTree = "<group>"; };
 		140837151A2456E500CEB56E /* actionbar_addroom_press 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "actionbar_addroom_press 2.png"; path = "image/actionbar_addroom_press 2.png"; sourceTree = "<group>"; };
@@ -1724,6 +1728,8 @@
 		1451100F1A199CCB00AC0946 /* image */ = {
 			isa = PBXGroup;
 			children = (
+				140683181A4C11BA00552BF6 /* add_room_download1.png */,
+				140683191A4C11BA00552BF6 /* add_room_download2.png */,
 				14083A361A2474F800CEB56E /* drop_down.png */,
 				140837131A2456E500CEB56E /* abs__spinner_ab_default_holo_light.9.png */,
 				140837141A2456E500CEB56E /* actionbar_addroom 2.png */,
@@ -2618,6 +2624,7 @@
 				140839181A2456E900CEB56E /* channel0.png in Resources */,
 				140839641A2456E900CEB56E /* guide1_background 2.png in Resources */,
 				140839491A2456E900CEB56E /* curtain_on2.png in Resources */,
+				1406831A1A4C11BA00552BF6 /* add_room_download1.png in Resources */,
 				140838B91A2456E900CEB56E /* alarmbell_turnon.png in Resources */,
 				1408390C1A2456E900CEB56E /* btn_normal_bg1.png in Resources */,
 				140839E31A2456E900CEB56E /* title_login.png in Resources */,
@@ -2682,6 +2689,7 @@
 				140838FD1A2456E900CEB56E /* bnt_login_press.png in Resources */,
 				04C0432519AB054A00613062 /* InfoPlist.strings in Resources */,
 				140839A21A2456E900CEB56E /* pattern_add.png in Resources */,
+				1406831B1A4C11BA00552BF6 /* add_room_download2.png in Resources */,
 				140839D61A2456E900CEB56E /* television_mute1.png in Resources */,
 				140838DB1A2456E900CEB56E /* background_music022.png in Resources */,
 				1451105F1A1B4A8D00AC0946 /* icon_outlet.png in Resources */,

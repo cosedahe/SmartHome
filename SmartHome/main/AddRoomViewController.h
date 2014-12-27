@@ -8,10 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
+#import "RoomBean.h"
+
 
 @interface AddRoomViewController : BaseViewController <UIGestureRecognizerDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *txt_roomType;
 @property (weak, nonatomic) IBOutlet UITextField *txt_name;
+@property RoomBean *roombean;
 
 - (IBAction)btn_ok_onClick:(id)sender;
 - (IBAction)btn_cancel_onClick:(id)sender;

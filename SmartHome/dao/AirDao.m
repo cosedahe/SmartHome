@@ -226,8 +226,8 @@
     [bean setTmp:[[NSString alloc] initWithUTF8String:(char *)sqlite3_column_text(statement, 3)]];
     [bean setWindspeed:[[NSString alloc] initWithUTF8String:(char *)sqlite3_column_text(statement, 4)]];
     [bean setModel:[[NSString alloc] initWithUTF8String:(char *)sqlite3_column_text(statement, 5)]];
-    [bean setFurnitureid:sqlite3_column_int(statement, 4)];
-    [bean setStudy:sqlite3_column_int(statement, 5)];
+    [bean setFurnitureid:sqlite3_column_int(statement, 6)];
+    [bean setStudy:sqlite3_column_int(statement, 7)];
     
     return bean;
 }

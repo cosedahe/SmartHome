@@ -15,10 +15,11 @@
 #import "../pojo/FurnitureBean.h"
 #import "BaseViewController.h"
 #import "CameraService.h"
+#import "MBProgressHUD.h"
 
 #define CELL_FURNITURE @"furniturecell"
 
-@interface SMRoomViewController : BaseViewController <UITableViewDelegate, UITableViewDataSource>
+@interface SMRoomViewController : BaseViewController <UITableViewDelegate, UITableViewDataSource, MBProgressHUDDelegate>
 {
 @private NSMutableArray *furniturelist;
 @private FurnitureDao *furnituredao;
@@ -26,6 +27,7 @@
 @private FurnitureBean *furniture;  // send to child view
 @private CameraService *cameraservice;
 @private OnIfSucceedMessageListener *onIfSucceedListener;
+    MBProgressHUD *_progress;
 }
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
